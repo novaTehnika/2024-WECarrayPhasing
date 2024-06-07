@@ -1,4 +1,4 @@
-function [dydt, torqueFlap, waveElev] = flapModel(t,y, ptoTorque, par)
+function [dydt, torqueFlap, waveElev] = flapModel(t,y, ptoTorque, par, iWEC)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % flapModel.m function m-file
 % AUTHORS: 
@@ -45,11 +45,11 @@ function [dydt, torqueFlap, waveElev] = flapModel(t,y, ptoTorque, par)
 iyrad = 3:2+par.WEC.ny_rad; % state vector indices for radiation damping states for WEC model
 
 % Wave excitation force
-waveElev = waveElevation(t,par);%par.WEC.waveElevation(t);
+waveElev = waveElevation(t,par,iWEC);
     
 % Excitation Torque
 t0 = par.tstart-par.Tramp;
-torqueFlap.wave = ramp(t-t0,par.TrampWEC)*excitationTorque(t,par);%par.WEC.excitationTorque(t);
+torqueFlap.wave = ramp(t-t0,par.TrampWEC)*excitationTorque(t,par,iWEC);%par.WEC.excitationTorque(t);
     
 % Hydrostatic torque
 torqueFlap.hydroStatic = -hydroStaticTorque(y(1), waveElev, par);

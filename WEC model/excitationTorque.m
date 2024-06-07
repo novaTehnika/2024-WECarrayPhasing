@@ -1,4 +1,4 @@
-function T_e = excitationTorque(t,par)
+function T_e = excitationTorque(t,par,iWEC)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % excitationTorque.m function m-file
 % AUTHORS: 
@@ -17,6 +17,7 @@ function T_e = excitationTorque(t,par)
 %
 % UPDATES:
 % 12/6/2023 - created from flapModel.m
+% 6/7/2024 - modified to account for multiple WECs
 %
 % Copyright (C) 2023  Jeremy W. Simmons II
 % 
@@ -36,6 +37,6 @@ function T_e = excitationTorque(t,par)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 T_e = sum( par.WEC.F_amp.*sqrt(2*par.wave.S_w.*par.WEC.dw) ...
-               .*sin(par.WEC.w*t + par.wave.phi + par.WEC.phi_e ));
+               .*sin(par.WEC.w*t + par.wave.phi(iWEC,:) + par.WEC.phi_e ));
 
 end

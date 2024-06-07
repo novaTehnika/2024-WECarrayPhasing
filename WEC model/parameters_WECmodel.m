@@ -68,6 +68,7 @@ par.WEC.b = KradNum';     % transfer function numerator coefficients for raditat
 par.WEC.L_flap = 11;      % [m] length of flap (hinge to top edge)
 par.WEC.T = 2;            % [m] flap thickness
 par.WEC.h = 8.9;          % [m] mean water depth to hinge
+par.WEC.H = 11;           % [m] mean water depth to sea bed
 par.WEC.W = 18;           % [m] flap width
 par.WEC.L_cm = 5;         % [m] distance of center of mass from hinge
 par.WEC.m = 127000;       % [kg] mass of flap
@@ -149,6 +150,22 @@ rng(par.wave.rngSeedPhase);
 par.wave.phi = 2*pi*(rand(par.WEC.nw,1)-0.5);
 
 
+% determine phase of wave elevation freq. components that reflect the
+% position of each WEC
+ % generate wave numbers as a function of frequency
+for iw = 1:nw
+    par.K(iw,1) = fzero(@(K) ...
+                    K*par.WEC.g*tanh(K*par.WEC.H) - par.WEC.w(iw)^2, ...
+                                        par.WEC.w(iw)^2/par.WEC.g);
+    par.k(iw,1) = K(iw)*cos(par.wave.waveDirection); % x component of wave number vector
+    par.l(iw,1) = K(iw)*sin(par.wave.waveDirection); % y component of wave number vector
+end
+
+% add phase due to position
+for iWEC = 1:par.NumWECs
+    par.WEC.phi(iWEC,:) = par.wave.phi - (k*par.WEC.x(iWEC) + l*par.WEC.y(iWEC));
+end
+
 % regular waves (supersedes previous calculations)
 if par.WEC.nw == 1
     par.wave.S_w = 0.5*par.wave.Hs^2;
@@ -158,20 +175,15 @@ if par.WEC.nw == 1
         interp1(par.imprt.WEC.w,par.imprt.WEC.F_amp,par.WEC.w,'linear');
     par.WEC.phi_e = ...
         interp1(par.imprt.WEC.w,par.imprt.WEC.phi_e,par.WEC.w,'linear');
-    par.WEC.phi = 0;
+
+    par.K = fzero(@(K) K*par.WEC.g*tanh(K*par.WEC.H) - par.WEC.w^2, ...
+                                        par.WEC.w^2/par.WEC.g);
+    par.k = K*cos(par.wave.waveDirection); % x component of wave number vector
+    par.l = K*sin(par.wave.waveDirection); % y component of wave number vector
+    par.WEC.phi = - (k*par.WEC.x(iWEC) + l*par.WEC.y(iWEC));
 end
 
 %% %%%%%%%%% FUNCTIONS %%%%%%%%%%%%%%%%%%%%
-%     function Aerr = areaErrFun(w,A,Atarget,w_ea,wmin,wmax)
-%         if w_ea < wmin 
-%             Aerr = abs(w_ea-wmin)*1e1 + ((Atarget-A(1))/Atarget)^2;
-%         elseif w_ea > wmax
-%             Aerr = abs(w_ea-wmax)*1e1 + ((Atarget-A(end))/Atarget)^2;
-%         else
-%             Aerr = ((Atarget-interp1(w,A,w_ea,'spline'))/Atarget)^2;
-%         end
-%     end
-
     function S_w = PiersonSpec(w,par)
         % Based on Falnes (2002) "Ocean Waves and Oscillating Systems:..."
         S_w = 10*pi^5*par.wave.Hs^2/par.wave.Tp^4./w.^5 ... 

@@ -1,4 +1,4 @@
-function waveElev = waveElevation(t,par)
+function waveElev = waveElevation(t,par,iWEC)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % waveElevation.m function m-file
 % AUTHORS: 
@@ -16,6 +16,7 @@ function waveElev = waveElevation(t,par)
 %
 % UPDATES:
 % 12/6/2023 - created from flapModel.m
+% 6/7/2024 - modified to account for multiple WECs
 %
 % Copyright (C) 2023  Jeremy W. Simmons II
 % 
@@ -35,6 +36,6 @@ function waveElev = waveElevation(t,par)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     waveElev = sum( sqrt(2*par.wave.S_w(:).*par.WEC.dw) ...
-                        .*sin(par.WEC.w(:)*t + par.wave.phi(:)) );
+                        .*sin(par.WEC.w(:)*t + par.wave.phi(iWEC,:)) );
 
 end
