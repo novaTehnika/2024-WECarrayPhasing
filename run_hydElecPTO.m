@@ -1,26 +1,26 @@
-% run_parPTO.m script m-file
+% run_hydElecPTO.m script m-file
 % AUTHORS:
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 11/2/2023
+% 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
 % This script serves as a shell for running a single simulation
 % using the model contained in sys_parPTO.m and solved by 
-% sim_parPTO.m.
+% sim_hydElecPTO.m.
 % The parameter initiallization functions are called within this
 % script before the sim_parPTO.m script is called.
 %
 % FILE DEPENDENCY:
-% ./Parallel-type PTO/
-%   initialConditionDefault_parPTO
-%   parameters_parPTO.m
-%   sim_parPTO.m
-%   stateIndex_parPTO.m
-%   sys_parPTO.m
+% ./Hydraulic-Electric PTO/
+%   initialConditionDefault_hydElecPTO
+%   parameters_hydElecPTO.m
+%   sim_hydElecPTO.m
+%   stateIndex_hydElecPTO.m
+%   sys_hydElecPTO.m
 % ./WEC model/
 %   flapModel.m
 %   hydroStaticTorque.m
@@ -48,9 +48,9 @@
 %   get_current_git_hash.m
 %
 % UPDATES:
-% 11/2/2023 - Created from run_refPTO.m.
+% 6/7/2024 - Created from run_parPTO.m.
 %
-% Copyright (C) 2023  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 % 
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ clear
 % clc
 addpath('WEC model') 
 addpath(['WEC model' filesep 'WECdata']) 
-addpath('Parallel-type PTO')
+addpath('Hydraulic-Electric PTO')
 addpath('Components')
 addpath(['Components' filesep 'Pipeline'])
 addpath('Sea States')
@@ -108,9 +108,13 @@ switch par.solver
 end
 
 % Sea State and Wave construction parameters
+switch 1
+    case 1
+        load('Sea States/SSdata_Bull2017WEPrize.mat')
+    case 2
+        load('Sea States/SSdata_HumboltBay_1D.mat')
+end
 SS = 2;
-Hs = [2.34 2.64 5.36 2.05 5.84 3.25];
-Tp = [7.31 9.86 11.52 12.71 15.23 16.5];
 par.wave.Hs = Hs(SS);
 par.wave.Tp = Tp(SS);
 par.WEC.nw = 1000; % num. of frequency components for harmonic superposition 
@@ -143,14 +147,14 @@ par.plConfig.included = 0;
 
 %% %%%%%%%%%%%%   COLLECT DATA  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define state indices
-par.iy = stateIndex_parPTO(par);
+par.iy = stateIndex_hydElecPTO(par);
 
 % Define initial conditions
-y0 = initialConditionDefault_parPTO(par); % default ICs, provides 'y0'
+y0 = initialConditionDefault_hydElecPTO(par); % default ICs, provides 'y0'
 
 % Simulation
 ticSIM = tic;
-out = sim_parPTO(y0,par);
+out = sim_hydElecPTO(y0,par);
 toc(ticSIM)
 
 %% %%%%%%%%%%%%   PLOTTING  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

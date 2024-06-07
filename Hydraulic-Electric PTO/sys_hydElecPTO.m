@@ -1,13 +1,13 @@
-function [dydt, nonState, control] = sys_parPTO(t,y,par)
+function [dydt, nonState, control] = sys_hydElecPTO(t,y,par)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% sys_parPTO.m function m-file
+% sys_hydElecPTO.m function m-file
 % AUTHORS: 
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 11/2/2023
+% 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
 % Calculate the state derivatives for a parallel-type wave energy PTO 
@@ -15,8 +15,8 @@ function [dydt, nonState, control] = sys_parPTO(t,y,par)
 % valve for enhanced pressure ripple filtering.
 %
 % FILE DEPENDENCY:
-% ../Parallel-type PTO/
-%   stateIndex_refPTO.m
+% ../Hydraulic-Electric PTO/
+%   stateIndex_hydElecPTO.m
 % ../WEC model/
 %   flapModel.m
 % ../Components/
@@ -31,9 +31,9 @@ function [dydt, nonState, control] = sys_parPTO(t,y,par)
 %   pipelineNPi.m
 %
 % UPDATES:
-% 11/2/2023 - created from sys_refPTO.m.
+% 6/7/2024 - created from sys_parPTO.m.
 %
-% Copyright (C) 2023  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 %
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by

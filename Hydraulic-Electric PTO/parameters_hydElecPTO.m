@@ -1,13 +1,13 @@
-function par = parameters_parPTO(par,filenameCoeff,filenameRadSS)
+function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% parameters_parPTO.m function m-file
+% parameters_hydElecPTO.m function m-file
 % AUTHORS: 
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 11/2/2023
+% 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
 % This function loads default parameters into the "par" structure. This
@@ -17,16 +17,16 @@ function par = parameters_parPTO(par,filenameCoeff,filenameRadSS)
 % without issue. Changing parameters in any design study script should be
 % check for affecting the other parameters.
 %
-% This function is for a use with sys_parPTO.m.
+% This function is for a use with sys_hydElecPTO.m.
 %
 % FILE DEPENDENCY:
 % ../WEC model/
 %   parameters_WECmodel.m
 %
 % UPDATES:
-% 11/2/2023 - created from parameters_refPTO.m.
+% 6/7/2024 - created from parameters_parPTO.m.
 %
-% Copyright (C) 2023  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 % 
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by

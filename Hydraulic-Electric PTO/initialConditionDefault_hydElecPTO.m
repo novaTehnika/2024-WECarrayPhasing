@@ -1,23 +1,22 @@
-function y0 = initialConditionDefault_parPTO(par)
-% initialConditionDefault_parPTO.m function m-file
+function y0 = initialConditionDefault_hydElecPTO(par)
+% initialConditionDefault_hydElecPTO.m function m-file
 % AUTHORS:
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 11/2/2023
+% 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
-% This script loads default intial conditions for the parPTO model.
+% This script loads default intial conditions for the hydElecPTO model.
 %
 % FILE DEPENDENCY:
 %
 % UPDATES:
-% 11/2/2023 - Created from initialConditionDefault_refPTO.m.
-% 12/6/2023 - Changed from script to function
+% 6/7/2024 - Created from initialConditionDefault_parPTO.m.
 %
-% Copyright (C) 2023  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 % 
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by

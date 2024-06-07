@@ -1,22 +1,22 @@
-function [out, exitCode] = sim_parPTO(y0,par)
+function [out, exitCode] = sim_hydElecPTO(y0,par)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% sim_parfPTO.m function m-file
+% sim_hydElecPTO.m function m-file
 % AUTHORS:
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 11/2/2023
+% 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
 % This script executes the set-up, solution, and basic post-processing for
-% the parPTO model.
+% the hydElecPTO model.
 %
 % FILE DEPENDENCY:
-% ../Parallel-type PTO/
-%   sys_parPTO.m
-%   stateIndex_parPTO.m
+% ../Hydraulic-Electric PTO/
+%   sys_hydElecPTO.m
+%   stateIndex_hydElecPTO.m
 % ../WEC model/
 %   flapModel.m
 %   hydroStaticTorque.m
@@ -38,9 +38,9 @@ function [out, exitCode] = sim_parPTO(y0,par)
 %   startParPool.m
 %
 % UPDATES:
-% 11/2/2023 - Created from sim_refPTO.m.
+% 6/7/2024 - Created from sim_parPTO.m.
 % 
-% Copyright (C) 2023  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 % 
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by
@@ -479,6 +479,6 @@ end
     end
 
     function [dydt, nonState, control] = sys_prototype(t,y,par)
-        [dydt, nonState, control] = sys_parPTO(t,y,par);
+        [dydt, nonState, control] = sys_hydElecPTO(t,y,par);
     end
 end
