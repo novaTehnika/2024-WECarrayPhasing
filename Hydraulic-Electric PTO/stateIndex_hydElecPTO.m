@@ -9,7 +9,10 @@ function iy = stateIndex_hydElecPTO(par)
 % 6/7/2024
 %
 % PURPOSE/DESCRIPTION:
-% This script loads the state indices for the hydElecPTO model
+% This script loads the state indices for the hydElecPTO model. The system
+% includes shared low and high-pressure accumulators, a control system, and
+% multiple WECs with WEC drive pumps. The WEC driven pumps have
+% compressible fluid in the pumping chambers.
 %
 % FILE DEPENDENCY:
 %
@@ -33,31 +36,33 @@ function iy = stateIndex_hydElecPTO(par)
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-iy.p_a = 1;
-iy.p_b = 2;
 
-iy.p_lin = 3;
-iy.p_lout = 4;
-iy.p_hin = 5;
-iy.p_hout = 6;
-iy.p_ro = 7;
+iy.p_l = 1;
+iy.p_h = 2;
 
-iy.p_filt = 8;
-iy.errInt_p_filt = 9;
+iy.p_filt = 3;
+iy.errInt_p_filt = 4;
 iy.control = [iy.p_filt; iy.errInt_p_filt];
 
-iy.theta = 10;
-iy.theta_dot = 11;
+% first WEC
+iy.p_a = 5;
+iy.p_b = 6;
+iy.theta = 7;
+iy.theta_dot = 8;
 iy.rad = (1:par.WEC.ny_rad) + iy.theta_dot; % state vector indices for radiation damping states for WEC model
-iy.WEC = [iy.theta iy.theta_dot iy.rad];
-iy.LPPL = (1:2*par.n_seg(1)-1) + iy.rad(end);
-iy.qLP = (1:2:2*par.n_seg(1)-1) + (iy.LPPL(1)-1);
-iy.pLP = (2:2:2*par.n_seg(1)-1) + (iy.LPPL(1)-1);
+iy.WEC = [iy.theta, iy.theta_dot, iy.rad];
 
-iy.HPPL = (1:2*par.n_seg(2)-1) + iy.LPPL(end);
-iy.qHP = (1:2:2*par.n_seg(2)-1) + (iy.HPPL(1)-1);
-iy.pHP = (2:2:2*par.n_seg(2)-1) + (iy.HPPL(1)-1);
+% remaining WECs
+ny_WEC = 2+2+par.WEC.ny_rad;
+for iWEC = 2:par.NumWECs
+iy.p_a = [iy.p_a, iy.p_a(iWEC-1)+ny_WEC*(iWEC-1)];
+iy.p_b = [iy.p_b, iy.p_b(iWEC-1)+ny_WEC*(iWEC-1)];
+iy.theta = [iy.theta, iy.theta(iWEC-1)+ny_WEC*(iWEC-1)];
+iy.theta_dot = [iy.theta_dot, iy.theta_dot(iWEC-1)+ny_WEC*(iWEC-1)];
+iy.rad = [iy.rad; iy.rad(iWEC-1,:)+ny_WEC*(iWEC-1)];
+iy.WEC = [iy.WEC; iy.WEC(iWEC-1,:)+(2+par.ny_rad)*(iWEC-1)];
+end
 
-iy.ny = iy.HPPL(end);
+iy.ny = iy.rad(end);
 
 end
