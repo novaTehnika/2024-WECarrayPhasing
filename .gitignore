@@ -1,0 +1,6 @@
+data*
+*.err
+*.out
+Data/
+*.asv
+matlabtemp/
