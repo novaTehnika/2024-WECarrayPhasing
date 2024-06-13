@@ -33,23 +33,19 @@ function y0 = initialConditionDefault_hydElecPTO(par)
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-y0(par.iy.theta,1) = 0.1*pi/2; % [rad]
-y0(par.iy.theta_dot,1) = 0; % [rad/s]
-y0(par.iy.rad,1) = zeros(numel(par.iy.rad),1);
+for iWEC = 1:par.NumWECs
+    y0(par.iy.theta(iWEC),1) = 0.1*pi/2; % [rad]
+    y0(par.iy.theta_dot(iWEC),1) = 0; % [rad/s]
+    y0(par.iy.rad(iWEC,:),1) = zeros(numel(par.iy.rad(iWEC,:)),1);
+    
+    y0(par.iy.p_a(iWEC),1) = 1e6; % [Pa]
+    y0(par.iy.p_b(iWEC),1) = 1e6; % [Pa]
+end
 
-y0(par.iy.p_a,1) = 1e6; % [Pa]
-y0(par.iy.p_b,1) = 1e6; % [Pa]
-
-y0(par.iy.p_lin,1) = par.control.p_l_nom; % [Pa]
-y0(par.iy.p_lout,1) = par.control.p_l_nom; % [Pa]
-y0(par.iy.p_hin,1) = par.control.p_h_nom; % [Pa]
-y0(par.iy.p_hout,1) = par.control.p_h_nom; % [Pa]
-y0(par.iy.p_ro,1) = par.control.p_h_nom; % [Pa]
+y0(par.iy.p_l,1) = par.control.p_l_nom; % [Pa]
+y0(par.iy.p_h,1) = par.control.p_h_nom; % [Pa]
 
 y0(par.iy.p_filt,1) = par.control.p_h_nom;
 y0(par.iy.errInt_p_filt,1) = 0;
-
-y0(par.iy.LPPL,1) = y0(par.iy.p_lout)*mod(2:2*par.n_seg(1),2)';
-y0(par.iy.HPPL,1) = y0(par.iy.p_hin)*mod(2:2*par.n_seg(2),2)';
 
 end

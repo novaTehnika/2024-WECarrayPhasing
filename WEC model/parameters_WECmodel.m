@@ -153,17 +153,17 @@ par.wave.phi = 2*pi*(rand(par.WEC.nw,1)-0.5);
 % determine phase of wave elevation freq. components that reflect the
 % position of each WEC
  % generate wave numbers as a function of frequency
-for iw = 1:nw
+for iw = 1:par.WEC.nw
     par.K(iw,1) = fzero(@(K) ...
                     K*par.WEC.g*tanh(K*par.WEC.H) - par.WEC.w(iw)^2, ...
                                         par.WEC.w(iw)^2/par.WEC.g);
-    par.k(iw,1) = K(iw)*cos(par.wave.waveDirection); % x component of wave number vector
-    par.l(iw,1) = K(iw)*sin(par.wave.waveDirection); % y component of wave number vector
+    par.k(iw,1) = par.K(iw)*cos(par.wave.waveDirection); % x component of wave number vector
+    par.l(iw,1) = par.K(iw)*sin(par.wave.waveDirection); % y component of wave number vector
 end
 
 % add phase due to position
 for iWEC = 1:par.NumWECs
-    par.WEC.phi(iWEC,:) = par.wave.phi - (k*par.WEC.x(iWEC) + l*par.WEC.y(iWEC));
+    par.WEC.phi(:,iWEC) = par.wave.phi - (par.k*par.WEC.x(iWEC) + par.l*par.WEC.y(iWEC));
 end
 
 % regular waves (supersedes previous calculations)

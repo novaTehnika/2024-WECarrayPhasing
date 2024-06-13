@@ -16,7 +16,7 @@
 %
 % FILE DEPENDENCY:
 % ./Hydraulic-Electric PTO/
-%   initialConditionDefault_hydElecPTO
+%   initialConditionDefault_hydElecPTO.m
 %   parameters_hydElecPTO.m
 %   sim_hydElecPTO.m
 %   stateIndex_hydElecPTO.m
@@ -68,8 +68,8 @@
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 % clc
-addpath('WEC model') 
-addpath(['WEC model' filesep 'WECdata']) 
+addpath('WEC model')
+addpath(['WEC model' filesep 'WECdata'])
 addpath('Hydraulic-Electric PTO')
 addpath('Components')
 addpath(['Components' filesep 'Pipeline'])
@@ -82,9 +82,9 @@ addpath('Utilities')
 
 % Simulation timeframe
 par.tstart = 0; %[s] start time of simulation
-par.tend = 2000; %[s] end time of simulation
+par.tend = 40.00; %[s] end time of simulation
 
-par.Tramp = 250; % [s] excitation force ramp period
+par.Tramp = .10; % [s] excitation force ramp period
 par.TrampWEC = min(25,par.Tramp); % [s] excitation force ramp period
 
 % Solver parameters
@@ -132,7 +132,7 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
 par.WEC.x = [0, 10];
 
 % load parameters
-par = parameters_parPTO(par,...
+par = parameters_hydElecPTO(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 %% Special modifications to base parameters
@@ -153,112 +153,107 @@ toc(ticSIM)
 
 %% %%%%%%%%%%%%   PLOTTING  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% %% WEC pos., vel., and Torque
-% bottomEdge = 1;
-% leftEdge = 2;
-% width = 7.5; % one column: 3+9/16, two column: 7.5
-% height = 6;
-% fontSize = 8;
-% lineWidth = 1;
-% 
-% fig = figure;
-% fig.Units = 'inches';
-% fig.Position = [leftEdge bottomEdge width height ];
-% 
-% 
-% ax(1) = subplot(3,1,1);
-% plot(out.t,out.waveElev)
-% xlabel('time (s)')
-% ylabel('elevation (m)')
-% title('Wave Elevation')
-% 
-% ax(2) = subplot(3,1,2);
-% xlabel('time (s)')
-% hold on
-% 
-% yyaxis left
-% plot(out.t,out.theta)
-% xlabel('time (s)')
-% ylabel('position (rad)')
-% % ylim([-pi/2 pi/2])
-% 
-% yyaxis right
-% plot(out.t,out.theta_dot)
-% ylabel('angular velocity (rad/s)')
-% % ylim(10*[-pi/2 pi/2])
-% 
-% ax(3) = subplot(3,1,3);
-% hold on
-% plot(out.t,1e-6*out.T_wave)
-% plot(out.t,1e-6*out.T_pto)
-% plot(out.t,1e-6*out.T_rad)
-% plot(out.t,1e-6*out.T_hydroStatic)
-% ylabel('Torque (MNm)')
-% 
-% legend('T_{w}','T_{PTO}','T_{r}','T_{h}')
-% 
-% linkaxes(ax,'x');
-% 
-% sgtitle('WEC Behaviour')
-% 
-% %% Pressure
-% bottomEdge = 1;
-% leftEdge = 3;
-% width = 7.5; % one column: 3+9/16, two column: 7.5
-% height = 9;
-% fontSize = 8;
-% lineWidth = 1;
-% 
-% fig = figure;
-% fig.Units = 'inches';
-% fig.Position = [leftEdge bottomEdge width height ];
-% 
-% ax(1) = subplot(3,1,1);
-% plot(out.t,1e-6*out.p_hin)
-% hold on
-% plot(out.t,1e-6*out.p_hout)
-% plot(out.t,1e-6*out.p_ro)
-% xlabel('Time (s)')
-% ylabel('Pressure (MPa)')
-% legend('p_{hin}','p_{hout}','p_{ro}')
-% 
-% ax(2) = subplot(3,1,2);
-% plot(out.t,1e-6*out.p_lin)
-% hold on
-% plot(out.t,1e-6*out.p_lout)
-% xlabel('Time (s)')
-% ylabel('Pressure (MPa)')
-% legend('p_{lin}','p_{lout}')
-% 
-% ax(3) = subplot(3,1,3);
-% plot(out.t,1e-3*out.dydt(:,par.iy.p_ro))
-% hold on
-% 
-% addpath('Utilities')
-% dist_dpdt = statsTimeVar_cdf(out.t,abs(out.dydt(:,par.iy.p_ro)));
-% dpdt_97 = dist_dpdt.xi(find(dist_dpdt.f > 0.97,1,'first'));
-% plot(out.t([1 end]),1e-3*dpdt_97*[1 1],'-.k')
-% p(1) = plot(out.t([1 end]),1e-3*dpdt_97*[-1 -1],'-.k');
-% p(1).HandleVisibility='off';
-% 
-% dist_dpdt = statsTimeVar_cdf(out.t,abs(out.dydt(:,par.iy.p_ro)));
-% dpdt_99 = dist_dpdt.xi(find(dist_dpdt.f > 0.99,1,'first'));
-% plot(out.t([1 end]),1e-3*dpdt_99*[1 1],'-.k')
-% p(2) = plot(out.t([1 end]),1e-3*dpdt_99*[-1 -1],'--k');
-% p(2).HandleVisibility='off';
-% 
-% plot(out.t([1 end]),1e-3*out.par.control.dpdt_ROmax*[1 1],'-r')
-% p(3) = plot(out.t([1 end]),1e-3*out.par.control.dpdt_ROmax*[-1 -1],'-r');
-% p(3).HandleVisibility='off';
-% 
-% xlabel('Time (s)')
-% ylabel('Rate of change in pressure (kPa/s)')
-% legend('dpdt_{ro}','+-97th p-tile |dpdt_{ro}|','+-99th p-tile |dpdt_{ro}|','target limit')
-% 
-% linkaxes(ax,'x');
-% 
-% sgtitle('Pressures')
-% 
+%% Wave elevation, WEC pos., and WEC vel.
+IWEC = [1 2 3];
+
+bottomEdge = 1;
+leftEdge = 2;
+width = 7.5; % one column: 3+9/16, two column: 7.5
+height = 6;
+fontSize = 8;
+lineWidth = 1;
+
+fig = figure;
+fig.Units = 'inches';
+fig.Position = [leftEdge bottomEdge width height ];
+
+ax(1) = subplot(3,1,1);
+for iWEC = IWEC
+    if IWEC(iWEC) <= par.NumWECs
+        plot(out.t,out.waveElev(:,iWEC)); hold on;
+        leg(iWEC) = {['WEC ',num2str(iWEC)]};
+    end
+end
+legend(leg)
+xlabel('time (s)')
+ylabel('elevation (m)')
+title('Wave Elevation')
+
+ax(2) = subplot(3,1,2);
+for iWEC = IWEC
+    if IWEC(iWEC) <= par.NumWECs
+        plot(out.t,out.theta(:,iWEC)); hold on;
+    end
+end
+xlabel('time (s)')
+ylabel('position (rad)')
+title('WEC Position')
+
+ax(3) = subplot(3,1,3);
+for iWEC = IWEC
+    if IWEC(iWEC) <= par.NumWECs
+        plot(out.t,out.theta_dot(:,iWEC)); hold on;
+    end
+end
+xlabel('time (s)')
+ylabel('angular velocity (rad/s)')
+title('WEC Velocity')
+
+sgtitle('WEC Behaviour')
+
+%% Forces on WEC
+iWEC = 1;
+
+bottomEdge = 1;
+leftEdge = 2;
+width = 7.5; % one column: 3+9/16, two column: 7.5
+height = 4;
+fontSize = 8;
+lineWidth = 1;
+
+fig = figure;
+fig.Units = 'inches';
+fig.Position = [leftEdge bottomEdge width height ];
+
+hold on
+plot(out.t,1e-6*out.T_wave(:,iWEC))
+plot(out.t,1e-6*out.T_pto(:,iWEC))
+plot(out.t,1e-6*out.T_rad(:,iWEC))
+plot(out.t,1e-6*out.T_hydroStatic(:,iWEC))
+xlabel('time (s)')
+ylabel('Torque (MNm)')
+
+title('Forces on WEC ',num2str(iWEC))
+
+legend('T_{w}','T_{PTO}','T_{r}','T_{h}')
+
+linkaxes(ax,'x');
+
+%% Pressure
+bottomEdge = 1;
+leftEdge = 3;
+width = 7.5; % one column: 3+9/16, two column: 7.5
+height = 9;
+fontSize = 8;
+lineWidth = 1;
+
+fig = figure;
+fig.Units = 'inches';
+fig.Position = [leftEdge bottomEdge width height ];
+
+ax(1) = subplot(2,1,1);
+plot(out.t,1e-6*out.p_h)
+xlabel('time (s)')
+ylabel('pressure (MPa)')
+title('High-Pressure Accumulator')
+
+
+ax(2) = subplot(2,1,2);
+plot(out.t,1e-6*out.p_l)
+xlabel('time (s)')
+ylabel('pressure (MPa)')
+title('Low-Pressure Accumulator')
+
 % %% Flow rates
 % bottomEdge = 1;
 % leftEdge = 3;

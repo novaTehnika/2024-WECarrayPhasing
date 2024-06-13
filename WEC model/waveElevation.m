@@ -35,7 +35,7 @@ function waveElev = waveElevation(t,par,iWEC)
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    waveElev = sum( sqrt(2*par.wave.S_w(:).*par.WEC.dw) ...
-                        .*sin(par.WEC.w(:)*t + par.wave.phi(iWEC,:)) );
+    waveElev = sum( sqrt(2*par.wave.S_w.*par.WEC.dw) ...
+                        .*sin(par.WEC.w*t + par.WEC.phi(:,iWEC)) );
 
 end

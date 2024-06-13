@@ -55,12 +55,12 @@ iy.WEC = [iy.theta, iy.theta_dot, iy.rad];
 % remaining WECs
 ny_WEC = 2+2+par.WEC.ny_rad;
 for iWEC = 2:par.NumWECs
-iy.p_a = [iy.p_a, iy.p_a(iWEC-1)+ny_WEC*(iWEC-1)];
-iy.p_b = [iy.p_b, iy.p_b(iWEC-1)+ny_WEC*(iWEC-1)];
-iy.theta = [iy.theta, iy.theta(iWEC-1)+ny_WEC*(iWEC-1)];
-iy.theta_dot = [iy.theta_dot, iy.theta_dot(iWEC-1)+ny_WEC*(iWEC-1)];
-iy.rad = [iy.rad; iy.rad(iWEC-1,:)+ny_WEC*(iWEC-1)];
-iy.WEC = [iy.WEC; iy.WEC(iWEC-1,:)+(2+par.ny_rad)*(iWEC-1)];
+    iy.p_a = [iy.p_a, iy.p_a(iWEC-1)+ny_WEC*(iWEC-1)];
+    iy.p_b = [iy.p_b, iy.p_b(iWEC-1)+ny_WEC*(iWEC-1)];
+    iy.theta = [iy.theta, iy.theta(iWEC-1)+ny_WEC*(iWEC-1)];
+    iy.theta_dot = [iy.theta_dot, iy.theta_dot(iWEC-1)+ny_WEC*(iWEC-1)];
+    iy.rad = [iy.rad; iy.rad(iWEC-1,:)+ny_WEC*(iWEC-1)];
+    iy.WEC = [iy.WEC; iy.WEC(iWEC-1,:)+ny_WEC*(iWEC-1)];
 end
 
 iy.ny = iy.rad(end);

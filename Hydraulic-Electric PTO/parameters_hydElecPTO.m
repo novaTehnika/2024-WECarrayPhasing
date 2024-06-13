@@ -107,7 +107,9 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
     par.pc_h = 4e6; % [Pa] charge pressure
 
     % Contoller Parameters
-    par.control.p_nom = 6e6; % [Pa]
+    par.control.p_load_nom = 6e6; % [Pa]
+    par.control.p_l_nom = 0.5e6; % [Pa]
+    par.control.p_h_nom = par.control.p_load_nom - par.control.p_l_nom; % [Pa]
 
      % Signal filtering
     par.control.tau_pfilt = 0.01; % [s] time constant for LPF for pressure signal
@@ -129,7 +131,7 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
      % inlet to low-pressure pipeline/outlet of charge pump
     maxPressure = 10e5; % [Pa]
     margin = 1e4; % [Pa]
-    maxFlow = 100e-3; % [m^3/s]
+    maxFlow = (100)*1e-3; % [(L/s) -> m^3/s]
     par.lPRV.p_crack = maxPressure - margin;
     par.lPRV.C = (maxPressure^(3/2) ...
                  - (maxPressure-margin)*maxPressure^(1/2))/maxFlow;

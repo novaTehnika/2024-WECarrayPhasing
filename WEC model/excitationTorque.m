@@ -37,6 +37,6 @@ function T_e = excitationTorque(t,par,iWEC)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 T_e = sum( par.WEC.F_amp.*sqrt(2*par.wave.S_w.*par.WEC.dw) ...
-               .*sin(par.WEC.w*t + par.wave.phi(iWEC,:) + par.WEC.phi_e ));
+               .*sin(par.WEC.w*t + par.WEC.phi(:,iWEC) + par.WEC.phi_e) );
 
 end
