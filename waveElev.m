@@ -137,6 +137,22 @@ end
 fig = figure('Units','inches',"Position",[1,1,10,2]);
 movie(fig,F,1,1/(t(2)-t(1)))
 
+
+%% test wave elevation function as implimented in WEC model
+t = 0:0.1:1200;
+
+for it = 1:numel(t)
+    waveElev_tseries(1,it) = waveElevation(t(it),par,1);
+    waveElev_tseries(2,it) = waveElevation(t(it),par,2);
+end
+
+
+figure
+plot(t,waveElev_tseries(1,:))
+hold on
+
+plot(t,waveElev_tseries(2,:))
+
 %%
 function S_w = PiersonSpec(w,par)
     % Based on Falnes (2002) "Ocean Waves and Oscillating Systems:..."
