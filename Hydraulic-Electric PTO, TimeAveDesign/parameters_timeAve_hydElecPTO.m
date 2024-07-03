@@ -1,30 +1,31 @@
-function par = parameters_timeAvePTO()
+function par = parameters_timeAve_hydElecPTO()
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% parameters_timeAvePTO.m function m-file
+% parameters_timeAve_hydElecPTO.m function m-file
 % AUTHORS:
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
 % Department of Mechanical Engineering
 %
 % CREATION DATE:
-% 12/31/2021
+% 7/3/2024
 %
 % PURPOSE:
-% This function outputs parameters for models of a wave-powered reverse 
-% osmosis system.
+% This function outputs parameters for a model of a wave energy-to-electric
+% power system.
 %
-% The models are simple, static models with that include two-way coupling 
-% with the time-averaged simulation results of a WEC; the coupling is set 
+% The model is a simple, static model with that includes two-way coupling
+% with the time-averaged simulation results of a WEC; the coupling is set
 % up such that the reaction force from the PTO is a function of the average
-% WEC speed (or power absortion) and the average WEC speed (or power 
+% WEC speed (or power absortion) and the average WEC speed (or power
 % absorption) is function of the reaction torque from the PTO.
 %
 % FILE DEPENDENCY: 
 %
 % UPDATES:
-% 12/31/2021 - created.
+% 7/3/2024 - adapted from parameters_timeAvePTO.m in 
+% 2021-TimeAvePTOarchetectureStudy repository.
 %
-% Copyright (C) 2022  Jeremy W. Simmons II
+% Copyright (C) 2024  Jeremy W. Simmons II
 % 
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by
@@ -41,15 +42,8 @@ function par = parameters_timeAvePTO()
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-     % RO module
-    par.p_osm =  2.275e6; % [Pa] osmotic pressure of feed water
-    par.A_w = 2.57e-12; % [m^3/(N-s)] permeabiity coefficient (Yu and Jenne,2018)
-    par.Y = 0.25;
-
      % Charge pump
     par.p_c = 0.3e6; % [Pa] charge pressure
-    par.eta_c = 0.7; % [-] charge pump efficiency
-    par.eta_m = 0.9; % [-] elec. motor efficiency
 
      % Pump/motor
     par.eta_pm = 0.9; % [-] pump/motor efficiency
