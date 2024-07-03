@@ -31,6 +31,7 @@ function [dydt, nonState, control] = sys_hydElecPTO(t,y,par)
 %
 % UPDATES:
 % 6/7/2024 - created from sys_parPTO.m.
+% 7/3/2024 - set low-pressure branch pressure to fixed
 %
 % Copyright (C) 2024  Jeremy W. Simmons II
 %
@@ -171,8 +172,9 @@ for iWEC = 1:par.NumWECs
 end
 
 % low-pressure accumulator
-dydt(par.iy.p_l) = 1/nonState.C_l*(nonState.q_c + nonState.q_m ...
-                - nonState.q_totalIn + nonState.q_hPRV - nonState.q_lPRV);
+% dydt(par.iy.p_l) = 1/nonState.C_l*(nonState.q_c + nonState.q_m ...
+%                 - nonState.q_totalIn + nonState.q_hPRV);
+dydt(par.iy.p_l) = 0;
 
 % high-pressure accumulators
 dydt(par.iy.p_h) = 1/nonState.C_h*(nonState.q_totalOut - nonState.q_m ...
