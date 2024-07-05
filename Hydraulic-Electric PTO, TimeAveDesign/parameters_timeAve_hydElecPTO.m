@@ -42,8 +42,13 @@ function par = parameters_timeAve_hydElecPTO()
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    % fluid properties
+    par.rho = 0.860*1000; % [kg/m3] density of working fluid
+    par.mu = (32)*1e-6*par.rho; % [(cSt) -> Pa-s]  Dynamic (absolute) viscosity
+    par.beta = 1.8e9; % [Pa]  Bulk Modulus of air free fluid
+
      % Charge pump
-    par.p_c = 0.3e6; % [Pa] charge pressure
+    par.p_l = 0.3e6; % [Pa] charge pressure
 
      % hydraulic motor
     par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
