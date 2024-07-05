@@ -69,7 +69,7 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
                        + dp_w/par.beta*(par.motor.V_r + 1));
 
      % torque
-    T_m = par.D_m*dp_w*(1 - par.motor.C_v*par.mu*w_m/dp_w + par.motor.C_f);
+    T_m = par.motor.D*dp_w*(1 - par.motor.C_v*par.mu*w_m/dp_w + par.motor.C_f);
 
     % Elec. power
     PP_gen = par.eta_gen*T_m*w_m;
@@ -82,11 +82,10 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
             varargout = {PP_gen};
         case 2
             % constraints c <= 0, ceq = 0
-            c(1) = PP_c - PP_gen;
-            c(2) = p_h - par.p_h_bnds(2);
-            c(3) = par.p_h_bnds(1) - p_h;
-            c(4) = T_c - par.T_c_data(par.SS,end);
-            c(5) = par.motor.w_min - w_m;
+            c(1) = p_h - par.p_h_bnds(2);
+            c(2) = par.p_h_bnds(1) - p_h;
+            c(3) = T_c - par.T_c_data(par.SS,end);
+            c(4) = par.motor.w_min - w_m;
             ceq = [];
             varargout = {c,ceq};
         case 3
