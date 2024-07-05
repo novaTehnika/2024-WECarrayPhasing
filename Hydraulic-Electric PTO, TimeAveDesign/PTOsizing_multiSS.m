@@ -59,9 +59,9 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
 %
 %
 % FILE DEPENDENCY: 
+% model_timeAve_hydElecPTO.m
 % maxRC.m
 % zero2nan.m
-% model_timeAve_hydElecPTO.m
 % 
 % UPDATES:
 % 7/3/2024 - adapted from PTOsizing_multiSS.m in 
@@ -109,7 +109,7 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
     dutyScale = 1; % [-] Scaling factor for switching duty
     
     % Bounds
-    p_h_bnds = bounds.p_f_bnds/pScale; % [Pa/Pa] Bounds for system pressure
+    p_h_bnds = bounds.p_h_bnds/pScale; % [Pa/Pa] Bounds for system pressure
     D_bnds = bounds.D_bnds/dutyScale; % [-] bounds for valve switching duty
     
     par.p_h_bnds = p_h_bnds*pScale; % [Pa] Bounds on feed pressure to be 
@@ -168,7 +168,7 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
         for iD_m = 1:nD_m
             
             % Set motor displacement
-            param.D_m = D_mArray_par(iD_m);
+            param.motor.D = D_mArray_par(iD_m);
             
             % loop through sea states
             for iSS = 1:nSS
@@ -193,7 +193,7 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
                 
                 % Record optimization result for operational parameters
                 p_h(iD_w,iD_m,iSS) = x(1)*pScale;
-                if iPTO == 2 || iPTO == 4
+                if iPTO == 2
                     duty(iD_w,iD_m,iSS) = x(2)*dutyScale;
                 end
                 
