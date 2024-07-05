@@ -51,16 +51,32 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
         case 1
             duty = 1;
     end
- 
+
     p_h = x(1);
     dp_w = p_h - par.p_l;
     T_c = (duty*par.D_w)*dp_w/par.eta_w;
     PP_w = power(T_c);
     q_w = PP_w*par.eta_w/dp_w;
-    q_m = min(q_w,par.q_m_max);
-    PP_gen = (p_h-par.p_l)*par.eta_pm*par.eta_gen*q_m;
-    PP_PRV = (p_h-par.p_l)*(q_w-q_m);
-            
+
+    % House power pump/motor
+     % determine speed
+    w_m = (q_w/par.motor.D - par.motor.C_s*(dp_w/par.mu))/ ...
+          (dp_w/par.beta*(par.motor.V_r + 1));
+    w_m = min(w_m,par.motor.w_max);
+
+     % flow
+    q_m = par.motor.D*w_m*(1 + par.motor.C_s*dp_w/(par.mu*w_m) ...
+                       + dp_w/par.beta*(par.motor.V_r + 1));
+
+     % torque
+    T_m = par.D_m*dp_w*(1 - par.motor.C_v*par.mu*w_m/dp_w + par.motor.C_f);
+
+    % Elec. power
+    PP_gen = par.eta_gen*T_m*w_m;
+
+    % Power lost to PRV
+    PP_PRV = dp_w*(q_w-q_m);
+
     switch outputConfig
         case 1
             varargout = {PP_gen};
@@ -70,6 +86,7 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
             c(2) = p_h - par.p_h_bnds(2);
             c(3) = par.p_h_bnds(1) - p_h;
             c(4) = T_c - par.T_c_data(par.SS,end);
+            c(5) = par.motor.w_min - w_m;
             ceq = [];
             varargout = {c,ceq};
         case 3

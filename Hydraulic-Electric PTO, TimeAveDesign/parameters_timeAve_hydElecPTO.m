@@ -45,8 +45,19 @@ function par = parameters_timeAve_hydElecPTO()
      % Charge pump
     par.p_c = 0.3e6; % [Pa] charge pressure
 
-     % Pump/motor
-    par.eta_pm = 0.9; % [-] pump/motor efficiency
+     % hydraulic motor
+    par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
+    par.motor.w_max = (1750)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
+    par.motor.w_min = (500)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
+
+      % efficiency model coeffs. (McCandlish and Dory model)
+       % Axial piston pump (data from Danfoss APP 43/1700)
+    par.motor.C_s = 3.0554e-10;
+    par.motor.V_r = 1.103;
+    par.motor.C_v = 7.1755e5;
+    par.motor.C_f = 0.0259;
+
+     % Generator
     par.eta_gen = 0.9; % [-] elec. generator efficiency
 
      % WEC-driven pump
