@@ -125,24 +125,24 @@ iPTO = 1;
 D_w = 0.23;
 f_D_w = 0.01;
 inc_D_w = (0.01)*D_w;
- % Total Ro membrane area;
+ % motor displacement
 D_m = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
 f_D_m = 0.01;
 inc_D_m = (0.01)*D_m;
 
-% Create array of displacement and memebrane area if these are variable.
+% Create array of displacement and motor displacement if these are variable.
  % WEC-driven pump displacment
 if design_case(iPTO) == 2 || design_case(iPTO) == 4
     min_D_w = inc_D_w*(floor(f_D_w*D_w/inc_D_w)+(mod(D_w*f_D_w,inc_D_w)>0));
-    D_wArray  = min_D_w:inc_D_w:D_w; % [m^3/s] displacement
+    D_wArray  = min_D_w:inc_D_w:D_w;
 else
     D_wArray = D_w;
 end
 
- % membrane area in RO module
+ % motor displacement
 if design_case(iPTO) == 3 || design_case(iPTO) == 4
     min_D_m = inc_D_m*(floor(f_D_m*D_m/inc_D_m)+(mod(D_m*f_D_m,inc_D_m)>0));
-    D_mArray  = min_D_m:inc_D_m:D_m; % [m^3/s] displacement
+    D_mArray  = min_D_m:inc_D_m:D_m;
 else
     D_mArray = D_m;
 end

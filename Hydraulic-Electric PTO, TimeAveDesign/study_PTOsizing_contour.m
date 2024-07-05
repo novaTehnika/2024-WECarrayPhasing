@@ -118,14 +118,13 @@ par.SSset = SSset;
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % WEC-driven pump displacment
-nD_w = 201; % Size of array for displacment
-% D_w = linspace(0.05,2,nD_w);
-D_wArray = logspace(log10(0.01),log10(1.25),nD_w); % [m^3/s] displacement
+nD_w = 201; % Size of array for pump displacement
+D_wArray = logspace(log10(0.01),log10(1.25),nD_w); % [m^3/rad] displacement
 
-% membrane area in Ro module
-nD_m = 201; % Size of array for membrane area
-D_mArray = logspace(log10(1e3),log10(0.3e5),nD_m);% [m^2] membrane area
-
+% motor displacement
+nD_m = 201; % Size of array for motor displacement
+D_mArray = logspace(log10(1e3),log10(10e3),nD_m)* ...
+                                    1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
 
 % Specify PTO configurations
  % Available PTO configurations
@@ -136,8 +135,7 @@ iPTO = 1;
 
 %% %%%%%%%%%%%%   COLLECT DATA  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data(iPTO) = PTOsizing_multiSS(D_wArray,D_mArray, ...
-             bounds,PTOarray(iPTO),design_case(iPTO), ...
-             ERUconfig(iPTO),par);
+             bounds,PTOarray(iPTO),design_case(iPTO),par);
 
 %% %%%%%%%%%%%%   SAVE DATA   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -148,7 +146,6 @@ return
 
 %% %%%%%%%%%%%%   PLOTTING  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 lineWidth = 1.5;
-iPTO1 = 1;
 
 loadColors
 levels = [.5 1 1.5 2 2.5 3 3.3 3.5];
@@ -164,9 +161,9 @@ end
 f = figure;
 colormap(f,co)
 
-[M,c1] = contour(data(iPTO1).D_m*2*pi/1e-6,data(iPTO1).D_w,data(iPTO1).q_permTotal,levels,'-','ShowText','on')
+[M,c1] = contour(data.D_m*2*pi/1e-6,data.D_w,data.PP_genTotal, ...
+                 levels,'-','ShowText','on')
 c1.LineWidth = lineWidth;
 xlabel('Motor displacement (cc/rev)')
 ylabel('Pump displacement (m^3/rad)')
-title(['Design Performance: PTO ',num2str(iPTO1)])
-legend(['PTO ',num2str(iPTO1)],['PTO ',num2str(iPTO2)])
+title(['Yearly Average Elec. Power Production: PTO ',num2str(iPTO)])
