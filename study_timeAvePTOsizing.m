@@ -1,4 +1,4 @@
-% run_PTOsizing.m script m-file
+% study_timeAvePTOsizing.m script m-file
 % AUTHORS:
 % Jeremy Simmons (email: simmo536@umn.edu)
 % University of Minnesota
@@ -8,17 +8,21 @@
 % 5 July 2024
 %
 % PURPOSE:
-% The purpose of this script is to determine optimal operating parameters
-% for a hydraulic-electric PTO architectures for wave-powered electric 
-% power production operating in a known distibution of sea conditions,
-% WEC-driven pump displacement, and hydraulic motor displacement. The 
-% design is specified in the script under the section heading "Variables".
+% The purpose of this script is to perform a design study sizing a 
+% hydraulic-electric PTO architectures for wave-powered electric power
+% production operating in a known distibution of sea conditions.
 % 
 % The model is a simple, static model with that includes two-way coupling
 % with the time-averaged simulation results of a WEC; the coupling is set
 % up such that the reaction force from the PTO is a function of the average
 % WEC speed (or power absortion) and the average WEC speed (or power
 % absorption) is function of the reaction torque from the PTO.
+%
+% In the design study, the WEC-driven pump displacement and hydraulic motor
+% displacement are varied using a grid of values. For each set of these
+% design variables, an optimization is performed to select the nominal 
+% operating pressure of the system and the switching duty (if applicable).
+% This routine is performed for each sea state.
 % 
 % The optimization of the operating pressure and switching duty is a
 % nonlinear, constrained optimization which seeks to maximize the electric
@@ -50,7 +54,6 @@
 % production is selected from the set of available designs in each sea
 % state.
 %
-%
 % FILE DEPENDENCIES:
 % PTOsizing_multiSS.m
 % model_timeAve_hydElecPTO
@@ -81,7 +84,10 @@
 %
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
-clc
+% clc
+addpath('Hydraulic-Electric PTO, TimeAveDesign')
+addpath('Utilities')
+[git_hash_string, git_status_string] = get_current_git_hash();
 
 %% %%%%%%%%%%%%   SIMULATION/DESIGN PARAMETERS  %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -89,7 +95,7 @@ clc
 par = parameters_timeAve_hydElecPTO();
 
 % bounds on pressures in system
-bounds.p_h_bnds = [4e6 30e6]; % [Pa/Pa] Bounds for system pressure
+bounds.p_h_bnds = [4e6 20e6]; % [Pa/Pa] Bounds for system pressure
 bounds.D_bnds = [0.1 1]; % [-] bounds for valve switching duty
 
 % WEC: load time averaged results for WEC performance
@@ -112,46 +118,55 @@ par.Tp = Tp;
 SSset = 1:numel(Hs);
 par.SSset = SSset;
 
-clearvars T_c_data PP_w_data weight Hs Tp
+%% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% %%%%%%%%%%%%   Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Available PTO configurations
+% WEC-driven pump displacment
+nD_w = 201; % Size of array for pump displacement
+D_wArray = logspace(log10(0.01),log10(1.25),nD_w); % [m^3/rad] displacement
+
+% motor displacement
+nD_m = 201; % Size of array for motor displacement
+D_mArray = logspace(log10(1e3),log10(10e3),nD_m)* ...
+                                    1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
+
+% Specify PTO configurations
+ % Available PTO configurations
 PTOarray = [1 1 1 1 2 2 2 2];
 design_case = [1 2 3 4 1 2 3 4];
 
-% Specified design
 iPTO = 1;
- % WEC-driven pump displacement
-D_w = 0.23;
-f_D_w = 0.01;
-inc_D_w = (0.01)*D_w;
- % motor displacement
-D_m = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
-f_D_m = 0.01;
-inc_D_m = (0.01)*D_m;
-
-% Create array of displacement and motor displacement if these are variable.
- % WEC-driven pump displacment
-if design_case(iPTO) == 2 || design_case(iPTO) == 4
-    min_D_w = inc_D_w*(floor(f_D_w*D_w/inc_D_w)+(mod(D_w*f_D_w,inc_D_w)>0));
-    D_wArray  = min_D_w:inc_D_w:D_w;
-else
-    D_wArray = D_w;
-end
-
- % motor displacement
-if design_case(iPTO) == 3 || design_case(iPTO) == 4
-    min_D_m = inc_D_m*(floor(f_D_m*D_m/inc_D_m)+(mod(D_m*f_D_m,inc_D_m)>0));
-    D_mArray  = min_D_m:inc_D_m:D_m;
-else
-    D_mArray = D_m;
-end
 
 %% %%%%%%%%%%%%   COLLECT DATA  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-data = PTOsizing_multiSS(D_wArray,D_mArray, ...
-                bounds,PTOarray(iPTO),design_case(iPTO),par);
+data(iPTO) = PTOsizing_multiSS(D_wArray,D_mArray, ...
+             bounds,PTOarray(iPTO),design_case(iPTO),par);
 
 %% %%%%%%%%%%%%   SAVE DATA   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-filename = ['data_PTOsizing_',char(datetime("now",'Format','yyyyMMddHHmmss'))];
+
+filename = ['data_PTOsizing_contour_',char(datetime("now",'Format','yyyyMMdd'))];
 save(filename,'-v7.3')
+
+return
+
+%% %%%%%%%%%%%%   PLOTTING  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+lineWidth = 1.5;
+
+loadColors
+levels = [.5 1 1.5 2 2.5 3 3.3 3.5];
+color1 = maroon;
+color2 = gold; 
+nlines = length(levels);
+colorWeight = linspace(0,1,nlines);
+co = zeros(nlines,3);
+for i=1:nlines
+    co(i,:) = colorWeight(i)*color2 + colorWeight(nlines-(i-1))*color1; 
+end
+
+f = figure;
+colormap(f,co)
+
+[M,c1] = contour(data.D_m*2*pi/1e-6,data.D_w,data.PP_genTotal, ...
+                 levels,'-','ShowText','on')
+c1.LineWidth = lineWidth;
+xlabel('Motor displacement (cc/rev)')
+ylabel('Pump displacement (m^3/rad)')
+title(['Yearly Average Elec. Power Production: PTO ',num2str(iPTO)])
