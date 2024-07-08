@@ -92,7 +92,7 @@ clc
 par = parameters_timeAve_hydElecPTO();
 
 % bounds on pressures in system
-bounds.p_h_bnds = [4e6 30e6]; % [Pa/Pa] Bounds for system pressure
+bounds.p_h_bnds = [4e6 20e6]; % [Pa/Pa] Bounds for system pressure
 bounds.D_bnds = [0.1 1]; % [-] bounds for valve switching duty
 
 % WEC: load time averaged results for WEC performance

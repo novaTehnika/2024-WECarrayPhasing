@@ -116,7 +116,7 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
                                     % passed to contraint fnc nonlcon()
     
     % Inital values
-    p_h_o = (6e6)/pScale;
+    p_h_o = (10e6)/pScale;
     duty_o = (0.9)/dutyScale;
     
     %% Build arguments for fmincon()
