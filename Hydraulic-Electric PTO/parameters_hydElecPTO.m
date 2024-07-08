@@ -77,16 +77,16 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
 
     % power control unit
       % pump/motor
-    par.D_m = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
-    par.w_m_max = (1750)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
-    par.w_m_min = (1)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
+    par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
+    par.motor.w_max = (1750)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
+    par.motor.w_min = (1)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
 
       % efficiency model coeffs. (McCandlish and Dory model)
        % Axial piston pump (data from Danfoss APP 43/1700)
-    par.APP.C_s = 3.0554e-10;
-    par.APP.V_r = 1.103;
-    par.APP.C_v = 7.1755e5;
-    par.APP.C_f = 0.0259;
+    par.motor.C_s = 3.0554e-10;
+    par.motor.V_r = 1.103;
+    par.motor.C_v = 7.1755e5;
+    par.motor.C_f = 0.0259;
     
       % generator
     par.eta_g = 0.9;  % efficiency of electric generator
@@ -115,8 +115,8 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
     par.control.tau_pfilt = 0.01; % [s] time constant for LPF for pressure signal
     
      % PI control of pressure using w_m
-    par.control.w_m_ctrl.max = par.w_m_max;
-    par.control.w_m_ctrl.min = par.w_m_min;
+    par.control.w_m_ctrl.max = par.motor.w_max;
+    par.control.w_m_ctrl.min = par.motor.w_min;
     par.control.w_m_ctrl.kp = 5e-4;
     par.control.w_m_ctrl.ki = 0*5e-6;
     
