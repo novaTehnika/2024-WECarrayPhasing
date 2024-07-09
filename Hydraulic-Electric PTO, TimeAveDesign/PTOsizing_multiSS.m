@@ -213,11 +213,8 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
                  PP_PRV(iD_w,iD_m,iSS)] = ...
                  model_timeAve_hydElecPTO(x.*x_scale,param,iPTO,3);
     
-                % modify electric power production with weight for sea
-                % state and feasibility of result. Weight is given as
-                % percentage.
+                % modify electric power production for feasibility.
                 PP_gen(iD_w,iD_m,iSS) = feasible(iD_w,iD_m,iSS)...
-                                            *par.weight(iSS)/100 ...
                                             *PP_gen(iD_w,iD_m,iSS);
     
             end
@@ -311,12 +308,15 @@ function data = PTOsizing_multiSS(D_wArray,D_mArray,bounds,iPTO, ...
                                         feasible(temp.iD_w,temp.iD_m,iSS);
 
             end
-            % Sum contributions to total production results
-            PP_genTotal(iD_w,iD_m) = sum([design(iD_w,iD_m,:).PP_gen]);
-    
+            % Sum contributions to total production results, weighted by
+            % probability of sea state occurance. Weight is given as
+            % percentage.
+            PP_genTotal(iD_w,iD_m) = sum([design(iD_w,iD_m,:).PP_gen] ...
+                                         .*par.weight/100);
+
         end
     end
-    
+
     %% Package results
      % Results given pump and motor displacement
     data.par = par;
