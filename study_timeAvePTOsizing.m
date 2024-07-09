@@ -95,7 +95,7 @@ addpath('Utilities')
 par = parameters_timeAve_hydElecPTO();
 
 % bounds on pressures in system
-bounds.p_h_bnds = [4e6 20e6]; % [Pa/Pa] Bounds for system pressure
+bounds.p_h_bnds = [4e6 30e6]; % [Pa/Pa] Bounds for system pressure
 bounds.D_bnds = [0.1 1]; % [-] bounds for valve switching duty
 
 % WEC: load time averaged results for WEC performance
@@ -122,11 +122,11 @@ par.SSset = SSset;
 
 % WEC-driven pump displacment
 nD_w = 201; % Size of array for pump displacement
-D_wArray = logspace(log10(0.01),log10(1.25),nD_w); % [m^3/rad] displacement
+D_wArray = logspace(log10(0.01),log10(0.5),nD_w); % [m^3/rad] displacement
 
 % motor displacement
 nD_m = 201; % Size of array for motor displacement
-D_mArray = logspace(log10(1e3),log10(10e3),nD_m)* ...
+D_mArray = logspace(log10(1e2),log10(5e3),nD_m)* ...
                                     1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
 
 % Specify PTO configurations
@@ -151,7 +151,7 @@ return
 lineWidth = 1.5;
 
 loadColors
-levels = [.5 1 1.5 2 2.5 3 3.3 3.5];
+levels = [50 75 100 125 145 150 155];
 color1 = maroon;
 color2 = gold; 
 nlines = length(levels);
@@ -164,9 +164,9 @@ end
 f = figure;
 colormap(f,co)
 
-[M,c1] = contour(data.D_m*2*pi/1e-6,data.D_w,data.PP_genTotal, ...
+[M,c1] = contour(data.D_m*2*pi/1e-6,data.D_w,1e-3*data.PP_genTotal, ...
                  levels,'-','ShowText','on')
 c1.LineWidth = lineWidth;
 xlabel('Motor displacement (cc/rev)')
 ylabel('Pump displacement (m^3/rad)')
-title(['Yearly Average Elec. Power Production: PTO ',num2str(iPTO)])
+title(['Yearly Average Elec. Power Production (kW): PTO ',num2str(iPTO)])
