@@ -61,7 +61,7 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
     % House power pump/motor
      % determine speed
     w_m = (q_w/par.motor.D - par.motor.C_s*(dp_w/par.mu))/ ...
-          (dp_w/par.beta*(par.motor.V_r + 1));
+          (1 + dp_w/par.beta*(par.motor.V_r + 1));
     w_m = min(w_m,par.motor.w_max);
 
      % flow
@@ -69,7 +69,7 @@ function  varargout = model_timeAve_hydElecPTO(x,par,iPTO,outputConfig)
                        + dp_w/par.beta*(par.motor.V_r + 1));
 
      % torque
-    T_m = par.motor.D*dp_w*(1 - par.motor.C_v*par.mu*w_m/dp_w + par.motor.C_f);
+    T_m = par.motor.D*dp_w*(1 - par.motor.C_v*par.mu*w_m/dp_w - par.motor.C_f);
 
     % Elec. power
     PP_gen = par.eta_gen*T_m*w_m;
