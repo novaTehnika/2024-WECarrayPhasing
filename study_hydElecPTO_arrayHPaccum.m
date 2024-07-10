@@ -211,7 +211,7 @@ y0 = initialConditionDefault_hydElecPTO(par); % default ICs, provides 'y0'
 
 % run simulation
 ticSIM = tic;
-out = sim_parPTO(y0,par);
+out = sim_hydElecPTO(y0,par);
 toc(ticSIM)
 
 % Calculate metrics
