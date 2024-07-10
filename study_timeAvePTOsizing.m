@@ -151,7 +151,7 @@ return
 lineWidth = 1.5;
 
 loadColors
-levels = [50 75 100 125 145 150 155];
+levels = [50 100 125 150 165];
 color1 = maroon;
 color2 = gold; 
 nlines = length(levels);
