@@ -58,7 +58,7 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
     % WEC-pump
     par.theta_max = pi/2; % [rad] maximum stroke (plus and minus) from upright poistion
      % pumping chamber
-    par.D_WEC = 0.23;         % [m^3/rad] flap pump displacement
+    par.D_WEC = 0.15;         % [m^3/rad] flap pump displacement
     V_wecPumpTotal = 2*par.theta_max*par.D_WEC;
     par.V_wecDead = V_wecPumpTotal/2*(0.2); % [m^3] dead volume attached to each port (a and b) of the WEC-driven pump
     par.eta_v_WEC = 1;
@@ -137,7 +137,7 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
                  - (maxPressure-margin)*maxPressure^(1/2))/maxFlow;
 
      % high-pressure outlet of WEC-driven pump
-    maxPressure = 20e6; % [Pa]
+    maxPressure = 30e6; % [Pa]
     margin = 5e4; % [Pa]
     maxFlow = (100)*1e-3; % [(L/s) -> m^3/s]
     par.hPRV.p_crack = maxPressure - margin;
