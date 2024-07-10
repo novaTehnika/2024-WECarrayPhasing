@@ -132,7 +132,17 @@ par.wave.waveDirection = 0; % [rad]
 par.WEC.nw = 1000; % num. of frequency components for harmonic superposition 
 par.wave.rngSeedPhase = 3; % seed for the random number generator
 
-% load parameters
+% number of WECs and their positions
+par.NumWECs = 1;
+
+ % location perpendicular to 0 degree wave direction
+WECspacing = 30; % [m]
+par.WEC.y = (0:par.NumWECs-1)*WECspacing;
+
+ % location parallel to 0 degree wave direction
+par.WEC.x = [0, 10];
+
+% load parameters (must come after NumWECs and WEC pos. are specified)
 par = parameters_hydElecPTO(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 

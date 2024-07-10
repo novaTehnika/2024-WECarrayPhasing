@@ -131,17 +131,6 @@ par.wave.waveDirection = 0; % [rad]
 par.WEC.nw = 1000; % num. of frequency components for harmonic superposition 
 par.wave.rngSeedPhase = 3; % seed for the random number generator
 
-% load parameters
-par = parameters_hydElecPTO(par,...
-    'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
-
-%% Special modifications to base parameters
-par.control.p_nom = 8e6; % [Pa]
-% par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
-par.control.p_l_nom = 0.5e6; % [Pa]
-
-D_m_base = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per WEC
-
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % number of WECs
 NumWECs = 1:10;
@@ -158,6 +147,13 @@ VperWEC_mesh = meshVar.VperWEC(:);
 nVar = length(NumWECs_mesh);
 
 saveSimData = 1; % save simulation data (1) or just output variables (0)
+
+%% Special modifications to base parameters
+par.control.p_nom = 8e6; % [Pa]
+% par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
+par.control.p_l_nom = 0.5e6; % [Pa]
+
+D_m_base = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per WEC
 
 %% Set study variables
 % number of WECs and their positions
@@ -186,6 +182,10 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
 
   x = ((1:par.NumWECs)-1)*lin_spacing - lin_spacing/2;
   par.WEC.x = par.WEC.x(randperm(par.NumWECs));
+
+% load parameters (must come after NumWECs and WEC pos. are specified)
+    par = parameters_hydElecPTO(par,...
+    'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 % accumulator volume
 par.Vc_h = NumWECs_mesh(iVar)*VperWEC_mesh(iVar);
