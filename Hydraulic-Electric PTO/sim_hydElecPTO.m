@@ -99,7 +99,7 @@ switch par.solver
     toc(ticODE)
 end
 
-handle errors
+% handle errors
 if exitCode == 1 % normal operation, no error in solver
     % check for negative pressure values
     if any(y(:,[par.iy.p_a, par.iy.p_b, par.iy.p_l]) < 0,'all')
