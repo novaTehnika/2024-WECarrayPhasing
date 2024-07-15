@@ -62,17 +62,17 @@
 % https://github.com/novaTehnika/2023-DynPTOModelDesignStudies
 %
 % Copyright (C) 2024  Jeremy W. Simmons II
-% 
+%
 %   This program is free software: you can redistribute it and/or modify
 %   it under the terms of the GNU General Public License as published by
 %   the Free Software Foundation, either version 3 of the License, or
 %   (at your option) any later version.
-% 
+%
 %   This program is distributed in the hope that it will be useful,
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of
 %   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 %   GNU General Public License for more details.
-% 
+%
 %   You should have received a copy of the GNU General Public License
 %   along with this program. If not, see <https://www.gnu.org/licenses/>.
 %
@@ -102,7 +102,7 @@ par.TrampWEC = min(25,par.Tramp); % [s] excitation force ramp period
 par.solver = 'fixed time'; % 'variable time' OR 'fixed time'
 switch par.solver
     case 'fixed time'
-        par.MaxStep = 5e-5;             % [s] time step size
+        par.MaxStep = 1e-5;             % [s] time step size
         par.downSampledStepSize = 1e-2; % [s] specifies time step for data output
         if mod(par.downSampledStepSize,par.MaxStep)
             warning('down-sampled time step is not an integer multiple of the maximum step size')
@@ -155,7 +155,7 @@ par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per
 
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nVar = 50;
-kv = logspace(log10(1e-4),log10(5e-3),nVar);% [m^3/s/Pa] valve coefficient for high-pressure outlet check valve
+kv = logspace(log10(0.85e-4),log10(1e-3),nVar);% [m^3/s/Pa] valve coefficient for high-pressure outlet check valve
 X = 1.5; % proportion between low and high-pressure check valves
 
 saveSimData = 1; % save simulation data (1) or just output variables (0)
