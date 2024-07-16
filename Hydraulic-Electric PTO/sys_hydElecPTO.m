@@ -54,7 +54,7 @@ function [dydt, nonState, control] = sys_hydElecPTO(t,y,par)
 
 %% PI control of p_load using w_m
  % Error
-err_p = y(par.iy.p_filt) - par.control.p_load_nom;
+err_p = y(par.iy.p_filt) - par.control.p_h_nom;
  % Feedforward
 w_ff = par.control.w_m_ctrl.min;
  % Control signal

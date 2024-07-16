@@ -96,7 +96,7 @@ bounds.p_h_bnds = [4e6 30e6]; % [Pa/Pa] Bounds for system pressure
 bounds.D_bnds = [0.1 1]; % [-] bounds for valve switching duty
 
 % WEC: load time averaged results for WEC performance
-switch 1
+switch 2
     case 1
         filename_WECpowerCurve = ...
             'studyData_coulombPTO_dampingStudy_20220927_slim.mat';
@@ -125,7 +125,7 @@ design_case = [1 2 3 4 1 2 3 4];
 % Specified design
 iPTO = 1;
  % WEC-driven pump displacement
-D_w = 0.23;
+D_w = 0.15;
 f_D_w = 0.01;
 inc_D_w = (0.01)*D_w;
  % motor displacement

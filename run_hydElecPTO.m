@@ -82,9 +82,9 @@ addpath('Utilities')
 
 % Simulation timeframe
 par.tstart = 0; %[s] start time of simulation
-par.tend = 40.00; %[s] end time of simulation
+par.tend = 500; %[s] end time of simulation
 
-par.Tramp = .10; % [s] excitation force ramp period
+par.Tramp = 250; % [s] excitation force ramp period
 par.TrampWEC = min(25,par.Tramp); % [s] excitation force ramp period
 
 % Solver parameters
@@ -122,7 +122,7 @@ par.WEC.nw = 1000; % num. of frequency components for harmonic superposition
 par.wave.rngSeedPhase = 3; % seed for the random number generator
 
 % number of WECs and their positions
-par.NumWECs = 2;
+par.NumWECs = 1;
 
  % location perpendicular to 0 degree wave direction
 WECspacing = 30; % [m]
@@ -136,7 +136,7 @@ par = parameters_hydElecPTO(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 %% Special modifications to base parameters
-par.control.p_nom = 6.11e6; % [Pa]
+par.control.p_h_nom = 28e6; % [Pa]
 par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
 
 %% %%%%%%%%%%%%   COLLECT DATA  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

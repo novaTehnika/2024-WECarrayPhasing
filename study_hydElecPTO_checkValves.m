@@ -147,7 +147,7 @@ par = parameters_hydElecPTO(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 %% Special modifications to base parameters
-par.control.p_nom = 8e6; % [Pa]
+par.control.p_h_nom = 28e6; % [Pa]
 % par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
 par.control.p_l_nom = 0.5e6; % [Pa]
 

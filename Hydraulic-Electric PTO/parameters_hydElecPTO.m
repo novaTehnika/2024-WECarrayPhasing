@@ -107,9 +107,8 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
     par.pc_h = 4e6; % [Pa] charge pressure
 
     % Contoller Parameters
-    par.control.p_load_nom = 6e6; % [Pa]
     par.control.p_l_nom = 0.5e6; % [Pa]
-    par.control.p_h_nom = par.control.p_load_nom - par.control.p_l_nom; % [Pa]
+    par.control.p_h_nom = 20e6; % [Pa]
 
      % Signal filtering
     par.control.tau_pfilt = 0.01; % [s] time constant for LPF for pressure signal
