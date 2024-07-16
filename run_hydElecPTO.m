@@ -304,100 +304,91 @@ title('Low-Pressure Accumulator')
 % sgtitle('Flow rates')
 % 
 % 
-% %% Controller behavior
-% bottomEdge = 1;
-% leftEdge = 3;
-% width = 7.5; % one column: 3+9/16, two column: 7.5
-% height = 9;
-% fontSize = 8;
-% lineWidth = 1;
-% 
-% fig = figure;
-% fig.Units = 'inches';
-% fig.Position = [leftEdge bottomEdge width height ];
-% 
-% ax(1) = subplot(5,1,1);
-% plot(out.t,1e-6*out.p_hout)
-% hold on
-% plot(out.t,1e-6*out.p_ro)
-% plot(out.t,1e-6*out.control.p_filt)
-% xlabel('Time (s)')
-% ylabel('Pressure (MPa)')
-% legend('p_{hout}','p_{ro}','p_{filt}')
-% 
-% ax(2) = subplot(5,1,2);
-% hold on
-% yyaxis left
-% plot(out.t,60/(2*pi)*out.control.w_pm)
-% plot(out.t,60/(2*pi)*out.w_pm)
-% ylabel('Shaft speed (rpm)')
-% yyaxis right
-% plot(out.t,1e-3*out.Tgen)
-% ylabel('Torque (kNm)')
-% legend('nominal','actual','Generator')
-% 
-% ax(3) = subplot(5,1,3);
-% hold on
-% plot(out.t,1e3*60*out.q_pm)
-% plot(out.t,1e3*60*out.q_hout)
-% plot(out.t,1e3*60*out.q_rv)
-% ylabel('Flow rate (Lpm)')
-% legend('q_{pm}','q_{hout}','q_{rv}')
-% 
-% ax(4) = subplot(5,1,4);
-% hold on
-% plot(out.t,out.control.errInt_p_filt)
-% legend('pressure control')
-% ylabel('Error integral')
-% xlabel('Time (s)')
-% 
-% ax(5) = subplot(5,1,5);
-% hold on
-% plot(out.t,sqrt(1e3)*1e3*out.control.kv_ideal)
-% plot(out.t,sqrt(1e3)*1e3*out.control.kv_rv)
-% legend('kv_ideal','kv_rv')
-% ylabel('valve coefficient (L/s/kPa^{1/2})')
-% xlabel('Time (s)')
-% 
-% linkaxes(ax,'x')
-% 
-% sgtitle('Controller behaviour')
-% 
-% %% WEC-driven pump
-% bottomEdge = 1;
-% leftEdge = 3;
-% width = 7.5; % one column: 3+9/16, two column: 7.5
-% height = 6;
-% fontSize = 8;
-% lineWidth = 1;
-% 
-% fig = figure;
-% fig.Units = 'inches';
-% fig.Position = [leftEdge bottomEdge width height ];
-% 
-% ax(1) = subplot(2,1,1);
-% plot(out.t,1e-6*out.p_a)
-% hold on
-% plot(out.t,1e-6*out.p_b)
-% plot(out.t,1e-6*out.p_hin,'k-')
-% plot(out.t,1e-6*out.p_lout,'k--')
-% xlabel('Time (s)')
-% ylabel('Pressure (MPa)')
-% legend('p_{a}','p_{b}','p_{hin}','p_{lout}')
-% 
-% ax(2) = subplot(2,1,2);
-% plot(out.t,1e3*60*out.q_hwp,'k-')
-% hold on
-% plot(out.t,1e3*60*out.q_lwp,'k--')
-% plot(out.t,1e3*60*out.q_sv,'b')
-% xlabel('Time (s)')
-% ylabel('Flow rate (Lpm)')
-% legend('q_{hin}','q_{lout}','q_{sv}')
-% 
-% linkaxes(ax,'x');
-% 
-% sgtitle('WEC-driven Pump Dynamics')
-% 
+%% Controller behavior
+bottomEdge = 1;
+leftEdge = 3;
+width = 7.5; % one column: 3+9/16, two column: 7.5
+height = 9;
+fontSize = 8;
+lineWidth = 1;
+
+fig = figure;
+fig.Units = 'inches';
+fig.Position = [leftEdge bottomEdge width height ];
+
+ax(1) = subplot(4,1,1);
+plot(out.t,1e-6*out.p_h)
+hold on
+plot(out.t,1e-6*out.control.p_filt)
+xlabel('Time (s)')
+ylabel('Pressure (MPa)')
+legend('p_{h}','p_{filt}')
+
+ax(2) = subplot(4,1,2);
+hold on
+yyaxis left
+plot(out.t,60/(2*pi)*out.control.w_m)
+plot(out.t,60/(2*pi)*out.w_m)
+ylabel('Shaft speed (rpm)')
+yyaxis right
+plot(out.t,1e-3*out.T_gen)
+ylabel('Torque (kNm)')
+legend('nominal','actual','Generator')
+
+ax(3) = subplot(4,1,3);
+hold on
+plot(out.t,1e3*60*out.q_m)
+plot(out.t,1e3*60*out.q_hwp)
+plot(out.t,1e3*60*out.q_hPRV)
+ylabel('Flow rate (Lpm)')
+legend('q_{m}','q_{hwp}','q_{hPRV}')
+
+ax(4) = subplot(4,1,4);
+hold on
+plot(out.t,out.control.errInt_p_filt)
+legend('pressure control')
+ylabel('Error integral')
+xlabel('Time (s)')
+
+linkaxes(ax,'x')
+
+sgtitle('Controller behaviour')
+
+%% WEC-driven pump
+bottomEdge = 1;
+leftEdge = 3;
+width = 7.5; % one column: 3+9/16, two column: 7.5
+height = 6;
+fontSize = 8;
+lineWidth = 1;
+
+fig = figure;
+fig.Units = 'inches';
+fig.Position = [leftEdge bottomEdge width height ];
+
+ax(1) = subplot(2,1,1);
+plot(out.t,1e-6*out.p_a)
+hold on
+plot(out.t,1e-6*out.p_b)
+plot(out.t,1e-6*out.p_h,'k-')
+plot(out.t,1e-6*out.p_l,'k--')
+xlabel('Time (s)')
+ylabel('Pressure (MPa)')
+legend('p_{a}','p_{b}','p_{h}','p_{l}')
+
+ax(2) = subplot(2,1,2);
+plot(out.t,1e3*60*out.q_hwp,'k-')
+hold on
+plot(out.t,1e3*60*out.q_lwp,'k--')
+plot(out.t,1e3*60*out.q_sv,'b')
+xlabel('Time (s)')
+ylabel('Flow rate (Lpm)')
+legend('q_{hin}','q_{lout}','q_{sv}')
+
+linkaxes(ax,'x');
+
+sgtitle('WEC-driven Pump Dynamics')
+
 % %% Pipelines
 % bottomEdge = 1;
 % leftEdge = 3;
