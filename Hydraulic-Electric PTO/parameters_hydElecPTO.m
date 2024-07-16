@@ -66,12 +66,12 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
 
      % check valves
       % inlet check valves (low-pressure)
-    par.kvWECin = 1.5*0.32e-3;
+    par.kvWECin = 1.5*2.1082e-04;
     par.pc_WECin = 1e5; % [Pa] Cracking pressure
     par.dp_WECin = 1e5; % [Pa] margin between cracking pressure and fully open condition
     
      % outlet check valves (high-pressure)
-    par.kvWECout = 0.32e-3;
+    par.kvWECout = 2.1082e-04;
     par.pc_WECout = 1e5; % [Pa] Cracking pressure
     par.dp_WECout = 1e5; % [Pa] margin between cracking pressure and fully open condition
 
