@@ -51,16 +51,16 @@ function par = parameters_timeAve_hydElecPTO()
     par.p_l = 0.3e6; % [Pa] charge pressure
 
      % hydraulic motor
-    par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
-    par.motor.w_max = (1750)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
-    par.motor.w_min = (500)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
+    par.motor.D = (500)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
+    par.motor.w_max = (3600)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
+    par.motor.w_min = (0)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
 
       % efficiency model coeffs. (McCandlish and Dory model)
        % Axial piston pump (data from Danfoss APP 43/1700)
-    par.motor.C_s = 3.0554e-10;
+    par.motor.C_s = 1.529827313040421e-09;
     par.motor.V_r = 1.103;
-    par.motor.C_v = 7.1755e5;
-    par.motor.C_f = 0.0259;
+    par.motor.C_v = 9.272715872908728e+03;
+    par.motor.C_f = 0.047594936708861;
 
      % Generator
     par.eta_gen = 0.9; % [-] elec. generator efficiency
