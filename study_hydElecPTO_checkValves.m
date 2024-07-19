@@ -147,14 +147,14 @@ par = parameters_hydElecPTO(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 %% Special modifications to base parameters
-par.control.p_h_nom = 28e6; % [Pa]
+par.control.p_h_nom = 30e6; % [Pa]
 % par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
 par.control.p_l_nom = 0.5e6; % [Pa]
 
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nVar = 50;
 kv = logspace(log10(0.4e-4),log10(0.3e-3),nVar);% [m^3/s/Pa] valve coefficient for high-pressure outlet check valve
-X = 1.5^2; % proportion between low and high-pressure check valve flow coeff.
+X = 2^2; % proportion between low and high-pressure check valve flow coeff.
 
 saveSimData = 1; % save simulation data (1) or just output variables (0)
 
