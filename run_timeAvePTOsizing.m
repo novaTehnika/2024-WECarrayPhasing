@@ -125,11 +125,11 @@ design_case = [1 2 3 4 1 2 3 4];
 % Specified design
 iPTO = 1;
  % WEC-driven pump displacement
-D_w = 0.15;
+D_w = 0.1;
 f_D_w = 0.01;
 inc_D_w = (0.01)*D_w;
  % motor displacement
-D_m = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
+D_m = (500)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]
 f_D_m = 0.01;
 inc_D_m = (0.01)*D_m;
 
