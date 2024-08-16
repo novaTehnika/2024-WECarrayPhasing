@@ -138,7 +138,7 @@ nVar1 = numel(NumWECs);
 
 % total accumulator volume
 nVar2 = 9;
-VperWEC = 1e-3*logspace(log10(5e3),log10(20e3),nVar1);% [L->m^3] total accumulator volume
+VperWEC = 1e-3*logspace(log10(5e3),log10(20e3),nVar2);% [L->m^3] total accumulator volume
 
 [meshVar.NumWECs, meshVar.VperWEC] = meshgrid(NumWECs,VperWEC);
 NumWECs_mesh = meshVar.NumWECs(:);
