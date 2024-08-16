@@ -58,7 +58,7 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
     % WEC-pump
     par.theta_max = pi/2; % [rad] maximum stroke (plus and minus) from upright poistion
      % pumping chamber
-    par.D_WEC = 0.1;         % [m^3/rad] flap pump displacement
+    par.D_WEC = 0.15;         % [m^3/rad] flap pump displacement
     V_wecPumpTotal = 2*par.theta_max*par.D_WEC;
     par.V_wecDead = V_wecPumpTotal/2*(0.2); % [m^3] dead volume attached to each port (a and b) of the WEC-driven pump
     par.eta_v_WEC = 1;
@@ -77,7 +77,7 @@ function par = parameters_hydElecPTO(par,filenameCoeff,filenameRadSS)
 
     % power control unit
       % pump/motor
-    par.motor.D = (500)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
+    par.motor.D = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad]  Motor displacement
     par.motor.w_max = (3600)/60*2*pi; % [(rpm) -> rad/s] maximum speed of motor
     par.motor.w_min = (1)/60*2*pi; % [(rpm) -> rad/s] minimum speed of motor
 
