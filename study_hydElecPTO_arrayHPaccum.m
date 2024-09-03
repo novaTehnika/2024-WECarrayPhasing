@@ -137,25 +137,32 @@ NumWECs = 1:10;
 nVar1 = numel(NumWECs);
 
 % total accumulator volume
-nVar2 = 9;
-VperWEC = 1e-3*logspace(log10(5e3),log10(20e3),nVar2);% [L->m^3] total accumulator volume
+nVar2 = 10;
+VperWEC = 1e-3*logspace(log10(10),log10(2e3),nVar2);% [L->m^3] total accumulator volume
 
-[meshVar.NumWECs, meshVar.VperWEC] = meshgrid(NumWECs,VperWEC);
+% nominal pressure
+nVar3 = 20;
+p_nom = linspace(10e6,30e6,nVar3); % [Pa]
+
+[meshVar.NumWECs, meshVar.VperWEC, meshVar.p_nom] = ...
+                                    meshgrid(NumWECs,VperWEC,p_nom);
 NumWECs_mesh = meshVar.NumWECs(:);
 VperWEC_mesh = meshVar.VperWEC(:);
+p_nom_mesh = meshVar.p_nom(:);
 
 nVar = length(NumWECs_mesh);
 
 saveSimData = 1; % save simulation data (1) or just output variables (0)
 
 %% Special modifications to base parameters
-par.control.p_h_nom = 28e6; % [Pa]
-% par.w_c = (2500)*2*pi/60; % [(rpm) -> rad/s] Charge pump speed
 par.control.p_l_nom = 0.5e6; % [Pa]
 
 D_m_base = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per WEC
 
 %% Set study variables
+% nominal pressure
+par.control.p_h_nom = p_nom_mesh(iVar); % [Pa]
+
 % number of WECs and their positions
 par.NumWECs = NumWECs_mesh(iVar);
 
