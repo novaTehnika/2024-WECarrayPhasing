@@ -175,7 +175,7 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
     Te_design = 10; % [s]
     theta_design = 0;
     K_design = fzero(@(K) K*par.WEC.g*tanh(K*par.WEC.H) - (2*pi/Te_design)^2, ...
-                                        (2*pi/Te_design)^2/par.WEC.g);
+                                        (2*pi/Te_design)^2/9.81);
     k_design = K_design*cos(theta_design); % x component of wave number vector
     waveLen_design = 2*pi/k_design;
 
@@ -188,7 +188,7 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
   lin_spacing = phase_spacing/2/pi*waveLen_design;
 
   x = ((1:par.NumWECs)-1)*lin_spacing - lin_spacing/2;
-  par.WEC.x = par.WEC.x(randperm(par.NumWECs));
+  par.WEC.x = x(randperm(par.NumWECs));
 
 % load parameters (must come after NumWECs and WEC pos. are specified)
     par = parameters_hydElecPTO(par,...
