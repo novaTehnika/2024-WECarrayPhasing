@@ -131,6 +131,20 @@ par.wave.waveDirection = 0; % [rad]
 par.WEC.nw = 1000; % num. of frequency components for harmonic superposition 
 par.wave.rngSeedPhase = 3; % seed for the random number generator
 
+% number of WECs and their positions
+par.NumWECs = 1;
+
+ % location perpendicular to 0 degree wave direction
+WECspacing = 30; % [m]
+par.WEC.y = (0:par.NumWECs-1)*WECspacing;
+
+ % location parallel to 0 degree wave direction
+par.WEC.x = [0, 10];
+
+% load parameters
+par = parameters_hydElecPTO(par,...
+    'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
+
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % number of WECs
 NumWECs = 1:10;
@@ -172,10 +186,10 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
 
  % location parallel to 0 degree wave direction
   % wavelength for specified energy period
-    Te_design = 10; % [s]
+    Te_design = 9.86; % [s]
     theta_design = 0;
     K_design = fzero(@(K) K*par.WEC.g*tanh(K*par.WEC.H) - (2*pi/Te_design)^2, ...
-                                        (2*pi/Te_design)^2/9.81);
+                                        (2*pi/Te_design)^2/par.WEC.g);
     k_design = K_design*cos(theta_design); % x component of wave number vector
     waveLen_design = 2*pi/k_design;
 
@@ -190,8 +204,8 @@ par.WEC.y = (0:par.NumWECs-1)*WECspacing;
   x = ((1:par.NumWECs)-1)*lin_spacing - lin_spacing/2;
   par.WEC.x = x(randperm(par.NumWECs));
 
-% load parameters (must come after NumWECs and WEC pos. are specified)
-    par = parameters_hydElecPTO(par,...
+% update WEC model parameters based on modified num. WECs and pos.
+    par = parameters_WECmodel(par,...
     'nemohResults_vantHoff2009_20180802.mat','vantHoffTFCoeff.mat');
 
 % accumulator volume
