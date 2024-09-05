@@ -216,7 +216,7 @@ par.motor.D = D_m_base*par.NumWECs;
 
 % Pressure relief valve
  % high-pressure outlet of WEC-driven pump
-    maxPressure = 20e6; % [Pa]
+    maxPressure = 30e6; % [Pa]
     margin = 5e4; % [Pa]
     maxFlow = (100)*1e-3*par.NumWECs; % [(L/s) -> m^3/s]
     par.hPRV.p_crack = maxPressure - margin;
