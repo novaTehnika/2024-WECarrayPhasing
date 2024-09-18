@@ -1,8 +1,8 @@
 #!/bin/bash -l
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --mem=4gb
-#SBATCH -t 8:00:00
+#SBATCH --mem=16gb
+#SBATCH -t 24:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=simmo536@umn.edu
 #SBATCH -p msismall
@@ -16,9 +16,11 @@ matlab -nodisplay -r \
 display(['iVar = ',num2str(iVar)]); \
 SS = ${SS}; \
 display(['SS = ',num2str(SS)]); \
+D_m_base = ${DISP}*1e-6/(2*pi); \
+display(['D_m_base = ',num2str(D_m_base),' m^3/rad']); \
 study_hydElecPTO_arrayHPaccum"
 
 # Commands to use
-# sbatch --export=SS=1 --array=1-675 ~/2024-WECarrayPhasing/study_hydElecPTO_arrayHPaccum.sh
+# sbatch --export=SS=1,DISP=316 --array=1-675 ~/2024-WECarrayPhasing/study_hydElecPTO_arrayHPaccum.sh
 # dos2unix  study_hydElecPTO_arrayHPaccum.sh
 

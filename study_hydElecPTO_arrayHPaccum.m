@@ -124,7 +124,7 @@ switch 1
     case 2
         load('Sea States/SSdata_HumboltBay_1D.mat')
 end
-SS = 2;
+% SS = 2;
 par.wave.Hs = Hs(SS);
 par.wave.Tp = Tp(SS);
 par.wave.waveDirection = 0; % [rad]
@@ -166,12 +166,12 @@ p_nom_mesh = meshVar.p_nom(:);
 
 nVar = length(NumWECs_mesh);
 
-saveSimData = 1; % save simulation data (1) or just output variables (0)
+saveSimData = 0; % save simulation data (1) or just output variables (0)
 
 %% Special modifications to base parameters
 par.control.p_l_nom = 0.5e6; % [Pa]
 
-D_m_base = (1000)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per WEC
+% D_m_base = (316)*1e-6/(2*pi); % [(cc/rev) -> m^3/rad] Motor displacement per WEC
 
 %% Set study variables
 % nominal pressure
@@ -265,6 +265,7 @@ timeStamp = datetime("now",'format','yyyy-MM-dd''T''HH:mm'); % time in ISO8601
 filename = ['data_hydElecPTO_arrayHPaccum', ...
             '_',char(datetime("now",'Format','yyyyMMdd')), ...
             '_',num2str(SS,leadingZeros(999)), ...
+            '_',num2str(D_m_base/1e-6*(2*pi),leadingZeros(9999)), ...
             '_',num2str(iVar,leadingZeros(nVar))];
 save(filename,'-v7.3')
 
