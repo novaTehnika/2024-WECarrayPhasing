@@ -6,8 +6,8 @@ display(['file ',num2str(j),' of ',num2str(nfiles)])
     if strfind(files(j).name,"data_hydElecPTO_arrayHPaccum")
         load(files(j).name,'-regexp','^(?!out)\w')
 
-        PP_WEC_array(iVar,SS) = PP_WEC;
-        PP_wp_array(iVar,SS) = PP_wp;
+        PP_WEC_array(iVar,SS) = sum(PP_WEC);
+        PP_wp_array(iVar,SS) = sum(PP_wp);
         PP_mLoss_array(iVar,SS) = PP_mLoss;
         PP_gen_array(iVar,SS) = PP_gen;
         PP_hPRV_array(iVar,SS) = PP_hPRV;
@@ -74,7 +74,7 @@ end
 
 for iVar = 1:nVar
     iVar1 = find(NumWECs == NumWECs_mesh(iVar));
-    iVar2 = find(V == V_mesh(iVar));
+    iVar2 = find(VperWEC == VperWEC_mesh(iVar));
     iVar3 = find(p_nom == p_nom_mesh(iVar));
 
     PP_WEC(iVar1,iVar2,iVar3,SS) = PP_WEC_array(iVar,SS);
@@ -90,6 +90,9 @@ for iVar1 = 1:nVar1
     for iVar2 = 1:nVar2
         iVar3 = ...
          find(PP_gen(iVar1,iVar2,:,SS) == max(PP_gen(iVar1,iVar2,:,SS)),1);
+        if isnan(max(PP_gen(iVar1,iVar2,:,SS)))
+            iVar3 = 1;
+        end
 
         PP_WEC_opt(iVar1,iVar2,SS) = PP_WEC(iVar1,iVar2,iVar3,SS);
         PP_wp_opt(iVar1,iVar2,SS) = PP_wp(iVar1,iVar2,iVar3,SS);
@@ -140,11 +143,15 @@ ax1.FontSize = axFontSize;
 
 
 NumWECs_to_plot = [1 2 3 4 5];
-I = find(NumWECs == NumWECs_to_plot);
+I = [];
+for i = 1:numel(NumWECs_to_plot)
+    I(i) = find(NumWECs == NumWECs_to_plot(i));
+end
+
 for i = 1:numel(I)
-    scatter(V,PP_gen(I(i),:,SS)*1e-3,100,color(i,:),'Marker','x','LineWidth',2)
+    scatter(VperWEC,PP_gen_opt(I(i),:,SS)*1e-3./NumWECs_to_plot(i),100,color(i,:),'Marker','x','LineWidth',2)
     hold on
-    legStr(i) = {[num2str(V(I(i))),' WECs']};
+    legStr(i) = {[num2str(NumWECs(I(i))),' WECs']};
 end
 ylabel('Elec. power, mean (kW)', ...
     'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
@@ -155,10 +162,10 @@ xlabel('Volume (1000L)', ...
 grid on
 
 % xlim([1 100])
-title(['Mean Power Production Vs.', ...
-    'Accumulator Volume:',newline, ...
+title(['Mean Power Production Vs. ', ...
+    'Accumulator Volume per WEC:',newline, ...
     'Sea State ',num2str(SS),', ',...
-    'Motor Disp. ',num2str(par.motor.D/1e-6*(2*pi)),'cc/rev'],...
+    'Motor Disp. ',num2str(D_m_base/1e-6*(2*pi)),'cc/rev'],...
 'Interpreter','latex','FontSize',supTitleFontSize,'fontname','Times')
 
 ax = gca;
