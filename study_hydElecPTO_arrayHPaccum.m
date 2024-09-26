@@ -147,11 +147,11 @@ par = parameters_hydElecPTO(par,...
 
 %% %%%%%%%%%%%%   Study Variables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % number of WECs
-NumWECs = 1:10;
+NumWECs = 1:5;
 nVar1 = numel(NumWECs);
 
 % total accumulator volume
-nVar2 = 10;
+nVar2 = 20;
 VperWEC = 1e-3*logspace(log10(10),log10(2e3),nVar2);% [L->m^3] total accumulator volume
 
 % nominal pressure
