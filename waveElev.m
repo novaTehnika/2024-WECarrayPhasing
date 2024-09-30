@@ -123,7 +123,7 @@ for ix = 1:nx
 end
 
 %%
-fig = figure('Units','inches',"Position",[1,1,10,2]);
+fig = figure('Units','inches',"Position",[1,1,3,2]);
 clearvars F
 for it = 1:nt
     plot(x,z_surf(:,:,it),'k-',[x(1),x(end)],[-H,-H],'LineWidth',2)
@@ -134,12 +134,16 @@ ylim([-11,3])
 end
 
 %%
-fig = figure('Units','inches',"Position",[1,1,10,2]);
+fig = figure('Units','inches',"Position",[1,1,3,2]);
 movie(fig,F,1,1/(t(2)-t(1)))
-
 
 %% test wave elevation function as implimented in WEC model
 t = 0:0.1:1200;
+
+x = [0 30];
+y = [0 15];
+par.WEC.phi(:,1) = par.wave.phi - (k*x(1) + l*y(1));
+par.WEC.phi(:,2) = par.wave.phi - (k*x(2) + l*y(2));
 
 for it = 1:numel(t)
     waveElev_tseries(1,it) = waveElevation(t(it),par,1);
@@ -148,11 +152,21 @@ end
 
 
 figure
-plot(t,waveElev_tseries(1,:))
+plot(t,waveElev_tseries(1,:),'LineWidth',1.5)
 hold on
 
-plot(t,waveElev_tseries(2,:))
+plot(t,waveElev_tseries(2,:),'LineWidth',1.5)
 
+% plot(t,(waveElev_tseries(1,:) + waveElev_tseries(2,:))./2,'k-','LineWidth',1.5)
+
+xlim([0 100])
+
+xlabel('time (s)')
+ylabel('elevation (m)')
+
+legend('at WEC A','at WEC B','average')
+
+title('Wave Elevation at WECs Placed Out of Phase')
 %%
 function S_w = PiersonSpec(w,par)
     % Based on Falnes (2002) "Ocean Waves and Oscillating Systems:..."
