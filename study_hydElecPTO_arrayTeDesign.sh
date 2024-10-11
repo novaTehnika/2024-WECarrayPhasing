@@ -20,7 +20,7 @@ D_m_base = ${DISP}*1e-6/(2*pi); \
 display(['D_m_base = ',num2str(D_m_base),' m^3/rad']); \
 NumWECs = ${NUMWECS}; \
 display(['NumWECs = ',num2str(NumWECs)]); \
-study_hydElecPTO_arrayTpDesign"
+study_hydElecPTO_arrayTeDesign"
 
 # Commands to use
 # sbatch --export=SS=1,DISP=316,NUMWECS=2 --array=1-2000 ~/2024-WECarrayPhasing/study_hydElecPTO_arrayTeDesign.sh
