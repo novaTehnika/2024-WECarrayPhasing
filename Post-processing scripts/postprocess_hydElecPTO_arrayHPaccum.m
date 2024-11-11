@@ -1,3 +1,9 @@
+% To find PP_max, run the following from repo. root:
+% load(["Sea States",filesep,"SSdata_Bull2017WEPrize.mat"])
+% SS = 2;
+% PP_max = max(PP_w_data(SS,:));
+PP_max = 3.414e+05;
+
 %% Collect data from data files
 files = dir;
 nfiles = size(files,1);
@@ -148,11 +154,19 @@ for i = 1:numel(NumWECs_to_plot)
     I(i) = find(NumWECs == NumWECs_to_plot(i));
 end
 
+p = semilogx([0 0], -[99 99]);
+p.HandleVisibility = 'off';
+
+hold on
 for i = 1:numel(I)
-    scatter(VperWEC,PP_gen_opt(I(i),:,SS)*1e-3./NumWECs_to_plot(i),100,color(i,:),'Marker','x','LineWidth',2)
+    scatter(VperWEC,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/PP_max,100,color(i,:),'Marker','x','LineWidth',2)
     hold on
     legStr(i) = {[num2str(NumWECs(I(i))),' WECs']};
 end
+yLim = ylim;
+ylim([0,yLim(2)])
+ylim([0,1])
+
 ylabel('Elec. power, mean (kW)', ...
     'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
 xlabel('Volume (1000L)', ...
@@ -161,11 +175,11 @@ xlabel('Volume (1000L)', ...
 
 grid on
 
-% xlim([1 100])
+PowerFactor = PP_max/(D_m_base*par.motor.w_max*(maxPressure-par.control.p_l_nom))
+
 title(['Mean Power Production Vs. ', ...
     'Accumulator Volume per WEC:',newline, ...
-    'Sea State ',num2str(SS),', ',...
-    'Motor Disp. ',num2str(D_m_base/1e-6*(2*pi)),'cc/rev'],...
+    'Power Factor of ',num2str(PowerFactor,3)],...
 'Interpreter','latex','FontSize',supTitleFontSize,'fontname','Times')
 
 ax = gca;
