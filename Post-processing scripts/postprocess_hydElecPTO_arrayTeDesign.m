@@ -9,7 +9,7 @@ files = dir;
 nfiles = size(files,1);
 for j = 1:nfiles
 display(['file ',num2str(j),' of ',num2str(nfiles)])
-    if strfind(files(j).name,"data_hydElecPTO_arrayHPaccum")
+    if strfind(files(j).name,"data_hydElecPTO_")
         load(files(j).name,'-regexp','^(?!out)\w')
 
         PP_WEC_array(iVar,SS) = sum(PP_WEC);
@@ -31,7 +31,7 @@ Done = [];
 notDone = 1:nVar;
 for j = 1:nfiles
 display(['file ',num2str(j),' of ',num2str(nfiles)])
-    if strfind(files(j).name,"data_hydElecPTO_arrayHPaccum")
+    if strfind(files(j).name,"data_hydElecPTO_")
         load(files(j).name,'-regexp','^(?!out)\w')
         [r,c,val] = find(notDone==iVar);
         notDone = [notDone(1:c-1), notDone(c+1:end)];
@@ -79,7 +79,7 @@ end
 % (based on power production)
 
 for iVar = 1:nVar
-    iVar1 = find(NumWECs == NumWECs_mesh(iVar));
+    iVar1 = find(X == X_mesh(iVar));
     iVar2 = find(VperWEC == VperWEC_mesh(iVar));
     iVar3 = find(p_nom == p_nom_mesh(iVar));
 
@@ -148,28 +148,25 @@ ax1.FontSize = axFontSize;
 
 
 
-NumWECs_to_plot = [1 2 3 4 5];
-I = [];
-for i = 1:numel(NumWECs_to_plot)
-    I(i) = find(NumWECs == NumWECs_to_plot(i));
-end
+I = [1 2 3 4];
 
-p = semilogx([0 0], -[99 99]);
-p.HandleVisibility = 'off';
+% p = semilogx([0 0], -[99 99]);
+% p.HandleVisibility = 'off';
 
 hold on
 for i = 1:numel(I)
-    scatter(VperWEC,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/PP_max,100,color(i,:),'Marker','x','LineWidth',2)
+    scatter(X,PP_gen_opt(:,I(i),SS)./par.NumWECs/PP_max,100,color(i,:),'Marker','x','LineWidth',2)
     hold on
-    legStr(i) = {[num2str(NumWECs(I(i))),' WECs']};
+    legStr(i) = {[num2str(1e3*VperWEC(I(i))),' L']};
 end
-yLim = ylim;
-ylim([0,yLim(2)])
-ylim([0,1])
+% yLim = ylim;
+% ylim([0,yLim(2)])
+ylim([0.6,0.8])
+% ylim([0,1])
 
 ylabel('Elec. power, mean (kW)', ...
     'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
-xlabel('Volume (1000L)', ...
+xlabel('T_e*/T_e', ...
 'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
 
 
@@ -177,9 +174,10 @@ grid on
 
 PowerFactor = PP_max/(D_m_base*par.motor.w_max*(maxPressure-par.control.p_l_nom))
 
-title(['Mean Power Production Vs. ', ...
-    'Accumulator Volume per WEC:',newline, ...
-    'Power Factor of ',num2str(PowerFactor,3)],...
+title(['Mean Power Production per WEC Vs. ', ...
+    'WEC Spacing',newline, ...
+    'Power Factor of ',num2str(PowerFactor,3),...
+    ' and ',num2str(NumWECs), ' WECs'],...
 'Interpreter','latex','FontSize',supTitleFontSize,'fontname','Times')
 
 ax = gca;
