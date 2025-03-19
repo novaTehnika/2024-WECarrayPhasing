@@ -78,9 +78,10 @@ subTitleFontSize = 9;
 axFontSize = 8;
 bottomEdge = 1;
 leftEdge = 3;
-width = 4; % one column: 3+9/16, two column: 7.5
+width = 86/25.4; % one column: 3+9/16, two column: 7.5
 height = 3;
 lineWidth = 0.5;
+fontName = 'Palatino';
 
 clearvars leg
 
@@ -91,38 +92,38 @@ set(fig,'defaultAxesColorOrder',[black; black]);
 
 n_plots = 1;
 ax1 = subplot(n_plots,1,1);
-ax1.FontName = 'Liberation Serif';
+ax1.FontName = fontName;
 ax1.FontSize = axFontSize;
 
 
 xlabel('flow coefficient, low-pressure (L/s/kPa\textsuperscript{1/2})', ...
-'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 title(['WEC-Driven Pump Performacne Vs.',newline, ...
     'Check Valve Sizing: Sea State ',num2str(SS)],...
-'Interpreter','latex','FontSize',supTitleFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',supTitleFontSize,'fontname',fontName)
 
 yyaxis left
 semilogx(X*kv*1000*sqrt(1000),eff_wecPump_array(:,SS),'k-')
 hold on
 ylabel('WEC-driven pump efficiency', ...
-'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 ylim([0.7 1])
 
 yyaxis right
 hold on
 semilogx(X*kv*1000*sqrt(1000),1e-3*p_min_wp_array(:,SS),'k--')
 ylabel('minimum pressure in pump (kPA)', ...
-'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 
 grid on
 
 % xlim([1 100])
 
 ax = gca;
-ax.FontName = 'Liberation Serif';
+ax.FontName = fontName;
 ax.FontSize = axFontSize;
 
 leg = legend('pump efficiency','min. pressure');
 leg.FontSize = axFontSize;
-leg.FontName = 'Times';
+leg.FontName = fontName;
 set(leg, 'Location', 'best')

@@ -129,9 +129,10 @@ subTitleFontSize = 9;
 axFontSize = 8;
 bottomEdge = 1;
 leftEdge = 3;
-width = 4; % one column: 3+9/16, two column: 7.5
+width = 86/25.4; % one column: 3+9/16, two column: 7.5
 height = 3;
 lineWidth = 0.5;
+fontName = 'Palatino';
 
 clearvars leg
 
@@ -142,7 +143,7 @@ set(fig,'defaultAxesColorOrder',[black; black]);
 
 n_plots = 1;
 ax1 = subplot(n_plots,1,1);
-ax1.FontName = 'Liberation Serif';
+ax1.FontName = fontName;
 ax1.FontSize = axFontSize;
 
 
@@ -168,9 +169,9 @@ ylim([0,yLim(2)])
 ylim([0,1])
 
 ylabel('Elec. power, mean (kW)', ...
-    'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
+    'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 xlabel('Volume (1000L)', ...
-'Interpreter','latex','FontSize',axFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 
 
 grid on
@@ -180,13 +181,13 @@ PowerFactor = PP_max/(D_m_base*par.motor.w_max*(maxPressure-par.control.p_l_nom)
 title(['Mean Power Production Vs. ', ...
     'Accumulator Volume per WEC:',newline, ...
     'Power Factor of ',num2str(PowerFactor,3)],...
-'Interpreter','latex','FontSize',supTitleFontSize,'fontname','Times')
+'Interpreter','latex','FontSize',supTitleFontSize,'fontname',fontName)
 
 ax = gca;
-ax.FontName = 'Liberation Serif';
+ax.FontName = fontName;
 ax.FontSize = axFontSize;
 
 leg = legend(legStr);
 leg.FontSize = axFontSize;
-leg.FontName = 'Times';
+leg.FontName = fontName;
 set(leg, 'Location', 'best')
