@@ -148,10 +148,19 @@ save(filename,'-v7.3')
 return
 
 %% %%%%%%%%%%%%   PLOTTING  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-lineWidth = 1.5;
+fontName = 'Palatino Linotype';
+supTitleFontSize = 10;
+subTitleFontSize = 10;
+axFontSize = 8;
+legFontSize = 8;
+bottomEdge = 1*2.5;
+leftEdge = 3*2.5;
+width = 8.6; % one column: 3+9/16, two column: 7.5
+height = 7;
+lineWidth = 0.75;
 
 loadColors
-levels = [50 100 125 150 175 190 195];
+levels = [100 125 150 175 190 195];
 color1 = maroon;
 color2 = gold; 
 nlines = length(levels);
@@ -161,12 +170,32 @@ for i=1:nlines
     co(i,:) = colorWeight(i)*color2 + colorWeight(nlines-(i-1))*color1; 
 end
 
-f = figure;
-colormap(f,co)
+fig = figure;
+fig.Units = 'centimeters';
+fig.Position = [leftEdge bottomEdge width height ];
+set(fig,'defaultAxesColorOrder',[black; black]);
+colormap(fig,co)
 
-[M,c1] = contour(data.D_m*2*pi/1e-6,data.D_w,1e-3*data.PP_genTotal, ...
-                 levels,'-','ShowText','on')
+n_plots = 1;
+ax1 = subplot(n_plots,1,1);
+ax1.FontName = fontName;
+ax1.FontSize = axFontSize;
+
+resFactor = 8;
+[M,c1] = contour(data.D_m(1:resFactor:end,1:resFactor:end)*2*pi/1e-6, ...
+    data.D_w(1:resFactor:end,1:resFactor:end), ...
+    1e-3*data.PP_genTotal(1:resFactor:end,1:resFactor:end), ...
+                 levels,'-','ShowText','off','LineWidth',lineWidth)
 c1.LineWidth = lineWidth;
-xlabel('Motor displacement (cc/rev)')
-ylabel('Pump displacement (m^3/rad)')
-title(['Yearly Average Elec. Power Production (kW): PTO ',num2str(iPTO)])
+grid on
+xlim([0 1500])
+
+ax = gca;
+ax.FontName = fontName;
+ax.FontSize = axFontSize;
+
+xlabel('Motor displacement (cc/rev)', ...
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
+ylabel('Pump displacement (m$^3$/rad)', ...
+'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
+% title(['Yearly Average Elec. Power Production (kW)'])

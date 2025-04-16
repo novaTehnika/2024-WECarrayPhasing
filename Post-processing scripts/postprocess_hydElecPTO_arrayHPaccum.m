@@ -124,20 +124,21 @@ color = [maroon; gold; blue; orange; green];
 
 linestyles = {'-', '--', ':', '-.'};
 
-supTitleFontSize = 9;
-subTitleFontSize = 9;
+fontName = 'Palatino Linotype';
+supTitleFontSize = 10;
+subTitleFontSize = 10;
 axFontSize = 8;
-bottomEdge = 1;
-leftEdge = 3;
-width = 86/25.4; % one column: 3+9/16, two column: 7.5
-height = 3;
-lineWidth = 0.5;
-fontName = 'Palatino';
+legFontSize = 8;
+bottomEdge = 1*2.5;
+leftEdge = 3*2.5;
+width = 6; % one column: 3+9/16, two column: 7.5
+height = 5;
+lineWidth = 1;
 
 clearvars leg
 
 fig = figure;
-fig.Units = 'inches';
+fig.Units = 'centimeters';
 fig.Position = [leftEdge bottomEdge width height ];
 set(fig,'defaultAxesColorOrder',[black; black]);
 
@@ -147,30 +148,29 @@ ax1.FontName = fontName;
 ax1.FontSize = axFontSize;
 
 
-
-
 NumWECs_to_plot = [1 2 3 4 5];
 I = [];
 for i = 1:numel(NumWECs_to_plot)
     I(i) = find(NumWECs == NumWECs_to_plot(i));
 end
 
-p = semilogx([0 0], -[99 99]);
+p = semilogx(VperWEC*1000,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/1e3,'Color',color(i,:),'LineWidth',lineWidth);
 p.HandleVisibility = 'off';
+    
 
 hold on
 for i = 1:numel(I)
-    scatter(VperWEC,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/PP_max,100,color(i,:),'Marker','x','LineWidth',2)
+    scatter(VperWEC*1000,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/1e3,10,color(i,:),'filled','Marker','o','LineWidth',lineWidth)
     hold on
+    p = plot(VperWEC*1000,PP_gen_opt(I(i),:,SS)./NumWECs_to_plot(i)/1e3,'Color',color(i,:),'LineWidth',lineWidth);
+    p.HandleVisibility = 'off';
     legStr(i) = {[num2str(NumWECs(I(i))),' WECs']};
 end
-yLim = ylim;
-ylim([0,yLim(2)])
-ylim([0,1])
 
-ylabel('Elec. power, mean (kW)', ...
+
+ylabel('Power (kW)', ...
     'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
-xlabel('Volume (1000L)', ...
+xlabel('Volume (L)', ...
 'Interpreter','latex','FontSize',axFontSize,'fontname',fontName)
 
 
@@ -178,16 +178,19 @@ grid on
 
 PowerFactor = PP_max/(D_m_base*par.motor.w_max*(maxPressure-par.control.p_l_nom))
 
-title(['Mean Power Production Vs. ', ...
-    'Accumulator Volume per WEC:',newline, ...
-    'Power Factor of ',num2str(PowerFactor,3)],...
-'Interpreter','latex','FontSize',supTitleFontSize,'fontname',fontName)
+% title(['Mean Power Production Vs. ', ...
+%     'Accumulator Volume per WEC:',newline, ...
+%     'Power Factor of ',num2str(PowerFactor,3)],...
+% 'Interpreter','latex','FontSize',supTitleFontSize,'fontname',fontName)
+
+% title(['Power Factor = ',num2str(PowerFactor,3)],...
+% 'Interpreter','latex','FontSize',supTitleFontSize,'fontname',fontName)
 
 ax = gca;
 ax.FontName = fontName;
 ax.FontSize = axFontSize;
 
-leg = legend(legStr);
-leg.FontSize = axFontSize;
-leg.FontName = fontName;
-set(leg, 'Location', 'best')
+% leg = legend(legStr);
+% leg.FontSize = axFontSize;
+% leg.FontName = fontName;
+% set(leg, 'Location', 'best')
